@@ -32,7 +32,9 @@ public class PickUpManager : MonoBehaviour
         //    //heldItem.transform.position = holdPos.transform.position;
         //}
 
-        if (Input.GetMouseButtonDown(2) && isHolding)
+
+
+        if (Input.GetMouseButtonDown(0) && isHolding)
         {
             DropItem();
         }
@@ -40,9 +42,9 @@ public class PickUpManager : MonoBehaviour
         {
             ThrowItem();
         }
-
-        if (isHolding == false)
+        else if (isHolding == false)
             Raycast();
+
     }
 
     void Raycast()
@@ -122,11 +124,11 @@ public class PickUpManager : MonoBehaviour
 
     void CrosshairActive()
     {
-        uiCrosshair.color = Color.red;
+       // uiCrosshair.color = Color.red;
     }
 
     void CrosshairNormal()
     {
-        uiCrosshair.color = Color.white;
+        //uiCrosshair.color = Color.white;
     }
 }
