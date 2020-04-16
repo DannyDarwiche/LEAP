@@ -154,7 +154,6 @@ public class MovingCharacter : MonoBehaviour
 
         float currentX = Vector3.Dot(velocity, xAxis);
         float currentZ = Vector3.Dot(velocity, zAxis);
-
         float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
@@ -203,7 +202,8 @@ public class MovingCharacter : MonoBehaviour
         if(steepContactCount > 1)
         {
             steepNormal.Normalize();
-            if(steepNormal.y >= minGroundDotProduct)
+
+            if (steepNormal.y >= minGroundDotProduct)
             {
                 groundContactCount = 1;
                 contactNormal = steepNormal;

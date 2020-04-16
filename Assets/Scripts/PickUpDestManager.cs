@@ -15,7 +15,7 @@ public class PickUpDestManager : MonoBehaviour
         //Physics.Raycast(item.transform.position, Vector3.down, out hit);
         //minY = item.transform.InverseTransformPoint(hit.point).y + item.transform.localScale.y;
         minY = item.transform.localScale.y / -2;
-        yAxis = Mathf.Tan(oldCameraPos.x - playerCamera.transform.rotation.x) * transform.localPosition.z;
+        yAxis = Mathf.Tan(playerCamera.transform.rotation.x - oldCameraPos.x) * transform.localPosition.z;
         float yClamp = Mathf.Clamp(yAxis, minY, maxY);
         transform.localPosition = new Vector3(transform.localPosition.x, yClamp, transform.localPosition.z);
         //transform.localPosition = new Vector3(transform.localPosition.x, yAxis, transform.localPosition.z);

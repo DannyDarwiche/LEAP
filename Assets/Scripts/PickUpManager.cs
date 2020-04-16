@@ -20,6 +20,7 @@ public class PickUpManager : MonoBehaviour
     private bool canHold = true;
     private GameObject heldItem;
     public GameObject holdPos;
+    //public Collider itemCollider;
     private bool isHolding = false;
     //public Camera cam;
 
@@ -79,7 +80,8 @@ public class PickUpManager : MonoBehaviour
         heldItem.transform.parent = holdPos.transform;
         heldItem.GetComponent<Rigidbody>().isKinematic = true;
         heldItem.GetComponent<Collider>().enabled = false;
-
+        //itemCollider.enabled = true;
+        
         //isHolding = true;
         //heldItem = raycastedObject.gameObject;
         //heldItem.GetComponent<Rigidbody>().useGravity = false;
@@ -99,7 +101,7 @@ public class PickUpManager : MonoBehaviour
         heldItem.transform.SetParent(null);
         heldItem.GetComponent<Rigidbody>().isKinematic = false;
         heldItem.GetComponent<Collider>().enabled = true;
-
+        //itemCollider.enabled = false;
         heldItem = null;
         isHolding = false;
     }
@@ -115,7 +117,7 @@ public class PickUpManager : MonoBehaviour
         heldItem.transform.SetParent(null);
         heldItem.GetComponent<Rigidbody>().isKinematic = false;
         heldItem.GetComponent<Collider>().enabled = true;
-
+        //itemCollider.enabled = false;
         heldItem.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
 
         heldItem = null;
