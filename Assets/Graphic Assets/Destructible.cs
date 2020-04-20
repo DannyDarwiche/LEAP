@@ -11,4 +11,10 @@ public class Destructible : MonoBehaviour
         Instantiate(destroyedVersion, transform.position, transform.rotation);
         Destroy(gameObject);
     }
+
+    void Break()
+    {
+        Instantiate(destroyedVersion, transform.position, transform.rotation);
+        Destroy(gameObject);
+    }
 }
