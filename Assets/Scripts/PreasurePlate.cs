@@ -5,7 +5,7 @@ using UnityEngine;
 public class PreasurePlate : MonoBehaviour
 {
     [SerializeField]
-    GameObject linkedObject;
+    GameObject[] linkedObject;
 
     [SerializeField]
     float expectedMass;
@@ -23,20 +23,33 @@ public class PreasurePlate : MonoBehaviour
 
     float currentMass;
 
-    float startY; 
+    float[] startY;
 
     void Start()
     {
-        startY = linkedObject.transform.position.y;
+        int index = 0;
+        startY = new float[linkedObject.Length];
+        foreach (GameObject lo in linkedObject)
+        {
+            startY[index] = lo.transform.position.y;
+            index++;
+        }
     }
 
     void Update()
     {
+        int index = 0;
+
         float yLiftHeight = currentMass / expectedMass * liftHeight;
         float maxSpeedChange = liftSpeed * Time.deltaTime;
-        float newY = Mathf.MoveTowards(linkedObject.transform.position.y, startY + yLiftHeight, maxSpeedChange);
-        Vector3 moveDistance = new Vector3(linkedObject.transform.position.x, newY, linkedObject.transform.position.z);
-        linkedObject.transform.SetPositionAndRotation(moveDistance, linkedObject.transform.rotation);
+
+        foreach (GameObject lo in linkedObject)
+        {
+            float newY = Mathf.MoveTowards(lo.transform.position.y, startY[index] + yLiftHeight * lo.transform.up.y, maxSpeedChange);
+            Vector3 moveDistance = new Vector3(lo.transform.position.x, newY, lo.transform.position.z);
+            lo.transform.SetPositionAndRotation(moveDistance, lo.transform.rotation);
+            index++;
+        }
     }
 
     void OnTriggerEnter(Collider other)
