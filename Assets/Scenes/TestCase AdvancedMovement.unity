@@ -2413,7 +2413,7 @@ PrefabInstance:
     - target: {fileID: 4441968599294598933, guid: 8f22b817f6163aa48a03ac08420bd2d7,
         type: 3}
       propertyPath: maxAcceleration
-      value: 20
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4441968599294598933, guid: 8f22b817f6163aa48a03ac08420bd2d7,
         type: 3}

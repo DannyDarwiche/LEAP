@@ -126,7 +126,7 @@ public class HoverBoard : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == GameObject.Find("Player"))
+        if (other.gameObject == GameObject.FindGameObjectWithTag("Player"))
         {
             transform.rotation = Quaternion.Euler(0, transform.rotation.eulerAngles.y, 0);
             other.transform.parent = playerParent;
