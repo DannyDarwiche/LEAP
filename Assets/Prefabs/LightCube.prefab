@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8820891560163082369}
   - component: {fileID: 6482085226950878765}
   - component: {fileID: 3938200555351283159}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: LightCube
-  m_TagString: Untagged
+  m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

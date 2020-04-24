@@ -5,50 +5,25 @@ using UnityEngine;
 public class PreasurePlate : MonoBehaviour
 {
     [SerializeField]
-    GameObject[] linkedObject;
-
-    [SerializeField]
     float expectedMass;
-
     [SerializeField]
     LayerMask layerMask;
-
     [SerializeField]
-    float liftSpeed;
-
+    GameObject[] linkedObjects;
     [SerializeField]
-    float liftHeight;
-
-    int layer;
+    bool offOrOn;
 
     float currentMass;
 
-    float[] startY;
-
+    MoveEvent[] linkedEvents;
     void Start()
     {
-        int index = 0;
-        startY = new float[linkedObject.Length];
-        foreach (GameObject lo in linkedObject)
+        linkedEvents = new MoveEvent[linkedObjects.Length];
+
+        for (int i = 0; i < linkedObjects.Length; i++)
         {
-            startY[index] = lo.transform.position.y;
-            index++;
-        }
-    }
 
-    void Update()
-    {
-        int index = 0;
-
-        float yLiftHeight = currentMass / expectedMass * liftHeight;
-        float maxSpeedChange = liftSpeed * Time.deltaTime;
-
-        foreach (GameObject lo in linkedObject)
-        {
-            float newY = Mathf.MoveTowards(lo.transform.position.y, startY[index] + yLiftHeight * lo.transform.up.y, maxSpeedChange);
-            Vector3 moveDistance = new Vector3(lo.transform.position.x, newY, lo.transform.position.z);
-            lo.transform.SetPositionAndRotation(moveDistance, lo.transform.rotation);
-            index++;
+            linkedEvents[i] = linkedObjects[i].GetComponent<MoveEvent>();
         }
     }
 
@@ -63,11 +38,34 @@ public class PreasurePlate : MonoBehaviour
                 return;
 
             currentMass += other.attachedRigidbody.mass;
+            Debug.Log(currentMass);
         }
     }
 
     void OnTriggerExit(Collider other)
     {
         currentMass -= other.attachedRigidbody.mass;
+        Debug.Log(currentMass);
+    }
+    void Update()
+    {
+        if (offOrOn)
+        {
+            if(currentMass > 0)
+                foreach (MoveEvent linkedevent in linkedEvents)
+                    linkedevent.Activated();
+            else
+                foreach (MoveEvent linkedEvent in linkedEvents)
+                    linkedEvent.Deactivated();
+
+        }
+        else if(currentMass > 0)
+        {
+            foreach (MoveEvent linkedEvent in linkedEvents)
+                linkedEvent.Activated(currentMass / expectedMass);
+        }
+        else
+            foreach (MoveEvent linkedEvent in linkedEvents)
+                linkedEvent.Deactivated();
     }
 }
