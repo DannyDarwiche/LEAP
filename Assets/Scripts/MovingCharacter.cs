@@ -46,10 +46,10 @@ public class MovingCharacter : MonoBehaviour
         Vector2 playerInput;
         playerInput.x = Input.GetAxis("Horizontal");
         playerInput.y = Input.GetAxis("Vertical");
-        playerInput = Vector2.ClampMagnitude(playerInput,1f);
+        playerInput = Vector2.ClampMagnitude(playerInput, 1f);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
 
-        desiredJump |= Input.GetButtonDown("Jump");    
+        desiredJump |= Input.GetButtonDown("Jump");
     }
     private void FixedUpdate()
     {
@@ -79,9 +79,9 @@ public class MovingCharacter : MonoBehaviour
         if (OnGround || SnapToGround() || CheckSteepContacts())
         {
             stepSinceLastGrounded = 0;
-            if(stepsSinceLastJump > 1)
+            if (stepsSinceLastJump > 1)
                 jumpPhase = 0;
-            if(groundContactCount > 1)
+            if (groundContactCount > 1)
                 contactNormal.Normalize();
         }
         else
@@ -109,17 +109,17 @@ public class MovingCharacter : MonoBehaviour
         else
             return;
 
-            stepsSinceLastJump = 0;
-            jumpPhase += 1;
-            float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-            jumpDirection = (jumpDirection + Vector3.up).normalized;
-            float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
+        stepsSinceLastJump = 0;
+        jumpPhase += 1;
+        float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
+        jumpDirection = (jumpDirection + Vector3.up).normalized;
+        float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
 
-            if(alignedSpeed > 0f)
-            {
-                jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
-            }
-            velocity += jumpDirection * jumpSpeed;
+        if (alignedSpeed > 0f)
+        {
+            jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+        }
+        velocity += jumpDirection * jumpSpeed;
     }
     private void OnCollisionEnter(Collision collision)
     {
@@ -140,7 +140,7 @@ public class MovingCharacter : MonoBehaviour
                 groundContactCount += 1;
                 contactNormal += normal;
             }
-            else if(normal.y > -0.01f)
+            else if (normal.y > -0.01f)
             {
                 steepContactCount += 1;
                 steepNormal += normal;
@@ -168,7 +168,7 @@ public class MovingCharacter : MonoBehaviour
     }
     bool SnapToGround()
     {
-        if(stepSinceLastGrounded > 1 || stepsSinceLastJump <= 2)
+        if (stepSinceLastGrounded > 1 || stepsSinceLastJump <= 2)
         {
             return false;
         }
@@ -186,20 +186,20 @@ public class MovingCharacter : MonoBehaviour
         groundContactCount = 1;
         contactNormal = hit.normal;
         float dot = Vector3.Dot(velocity, hit.normal);
-        if(dot > 0f)
+        if (dot > 0f)
         {
             velocity = (velocity - hit.normal * dot).normalized * speed;
         }
         return true;
     }
-    float GetMinDot (int layer)
+    float GetMinDot(int layer)
     {
         return (stairsMask & (1 << layer)) == 0 ? minGroundDotProduct : minStairsDotProduct;
     }
 
     bool CheckSteepContacts()
     {
-        if(steepContactCount > 1)
+        if (steepContactCount > 1)
         {
             steepNormal.Normalize();
 

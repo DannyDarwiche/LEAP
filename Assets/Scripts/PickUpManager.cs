@@ -45,7 +45,6 @@ public class PickUpManager : MonoBehaviour
         }
         else if (isHolding == false)
             Raycast();
-
     }
 
     void Raycast()
@@ -81,7 +80,7 @@ public class PickUpManager : MonoBehaviour
         heldItem.GetComponent<Rigidbody>().isKinematic = true;
         heldItem.GetComponent<Collider>().enabled = false;
         //itemCollider.enabled = true;
-        
+
         //isHolding = true;
         //heldItem = raycastedObject.gameObject;
         //heldItem.GetComponent<Rigidbody>().useGravity = false;
@@ -126,11 +125,11 @@ public class PickUpManager : MonoBehaviour
 
     void CrosshairActive()
     {
-       // uiCrosshair.color = Color.red;
+        uiCrosshair.color = Color.red;
     }
 
     void CrosshairNormal()
     {
-        //uiCrosshair.color = Color.white;
+        uiCrosshair.color = Color.white;
     }
 }
