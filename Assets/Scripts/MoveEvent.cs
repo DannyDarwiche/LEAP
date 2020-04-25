@@ -9,7 +9,7 @@ public class MoveEvent : MonoBehaviour
     [SerializeField]
     float moveLength, moveSpeed;
 
-    bool activated;
+    public bool activated;
     float activatedPercentage;
     Vector3 startPosition;
 

@@ -36,7 +36,6 @@ public class ButtonScript : MonoBehaviour
     }
     void OnMouseDown()
     {
-        Debug.Log(activated);
         if (!activated)
         {
             foreach (MoveEvent linkedEvent in linkedEvents)
