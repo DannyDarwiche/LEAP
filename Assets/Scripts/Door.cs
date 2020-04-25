@@ -18,9 +18,11 @@ public class Door : MonoBehaviour
             if (Vector3.Dot(this.transform.forward, player.transform.forward) < 0)
             {
                 Debug.Log("Test");
-                if (openPos)
+                if (openPos || openNeg)
                 {
                     animator.enabled = true;
+                    animator.SetBool("OpenNeg", false);
+                    openNeg = false;
                     animator.SetBool("OpenPos", false);
                     openPos = false;
                 }
@@ -33,11 +35,13 @@ public class Door : MonoBehaviour
             else
             {
                 Debug.Log("Test1");
-                if (openNeg)
+                if (openNeg || openPos)
                 {
                     animator.enabled = true;
                     animator.SetBool("OpenNeg", false);
                     openNeg = false;
+                    animator.SetBool("OpenPos", false);
+                    openPos = false;
 
                 }
                 else

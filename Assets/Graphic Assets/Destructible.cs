@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class Destructible : MonoBehaviour
@@ -10,6 +11,11 @@ public class Destructible : MonoBehaviour
     {
         Instantiate(destroyedVersion, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    void Start()
+    {
+        destroyedVersion.transform.localScale = this.transform.localScale/100;
     }
 
     //void OnMouseDown()
