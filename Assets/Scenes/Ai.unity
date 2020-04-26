@@ -721,7 +721,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 680856663}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c3c994bda0a6d3478556366471d3566, type: 3}
   m_Name: 
@@ -1329,6 +1329,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Capsule
       objectReference: {fileID: 0}
+    - target: {fileID: 4441968599294598932, guid: 8f22b817f6163aa48a03ac08420bd2d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4441968599294598933, guid: 8f22b817f6163aa48a03ac08420bd2d7,
         type: 3}
       propertyPath: maxAirJumps
@@ -1557,7 +1562,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-40356
+  m_Name: pb_Mesh-15578
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

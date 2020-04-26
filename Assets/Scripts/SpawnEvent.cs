@@ -27,7 +27,7 @@ public class SpawnEvent : MonoBehaviour
     void Start()
     {
         objectpooler = ObjectPooler.instance;
-    }w
+    }
     void FixedUpdate()
     {
         if (spawning)
