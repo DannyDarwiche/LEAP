@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,12 +11,14 @@ public class PickUpManager : MonoBehaviour
     [SerializeField] private int rayLength = 10;
     [SerializeField] private LayerMask layerMaskInteractable;
     [SerializeField] private Image uiCrosshair;
+    
 
     //Can be split into seperate pickup/throw script
 
     float throwForce = 20;
     Vector3 objectPos;
     float distance;
+    Drop itemDropScript;
 
     private bool canHold = true;
     private GameObject heldItem;
@@ -35,7 +38,7 @@ public class PickUpManager : MonoBehaviour
 
 
 
-        if (Input.GetMouseButtonDown(0) && isHolding)
+        if ((Input.GetMouseButtonDown(0) && isHolding))
         {
             DropItem();
         }
@@ -71,54 +74,62 @@ public class PickUpManager : MonoBehaviour
         }
     }
 
+    void FixedUpdate()
+    {
+        if (isHolding)
+        {
+            if (itemDropScript.dropitem)
+            {
+
+                DropItem();
+                
+                return;
+            }
+
+            heldItem.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+            float distance = Vector3.Distance(heldItem.transform.position, holdPos.transform.position);
+            if (distance > 2)
+            {
+
+                DropItem();
+                return;
+            }
+
+            Vector3 direction = holdPos.transform.position - heldItem.transform.position;
+            //direction.Normalize();
+            Vector3 movementLerp = Vector3.Lerp(heldItem.transform.position, holdPos.transform.position, Time.deltaTime*distance*10);
+            
+            heldItem.GetComponent<Rigidbody>().MovePosition(movementLerp);
+        }
+    }
     void PickUp()
     {
         isHolding = true;
         heldItem = raycastedObject.gameObject;
-        heldItem.transform.position = holdPos.transform.position;
-        heldItem.transform.parent = holdPos.transform;
-        heldItem.GetComponent<Rigidbody>().isKinematic = true;
-        heldItem.GetComponent<Collider>().enabled = false;
-        //itemCollider.enabled = true;
-
-        //isHolding = true;
-        //heldItem = raycastedObject.gameObject;
-        //heldItem.GetComponent<Rigidbody>().useGravity = false;
-        //heldItem.GetComponent<Rigidbody>().detectCollisions = true;
-        //heldItem.transform.position = holdPos.transform.position;
-        //heldItem.transform.parent = holdPos.transform;
+        heldItem.GetComponent<Rigidbody>().useGravity = false;
+        itemDropScript = heldItem.GetComponent<Drop>();
+        itemDropScript.enabled = true;
     }
 
-    void DropItem()
+    public void DropItem()
     {
-        //heldItem.transform.SetParent(null);
-        //isHolding = false;
-        //heldItem.GetComponent<Rigidbody>().useGravity = true;
-
-
         isHolding = false;
-        heldItem.transform.SetParent(null);
-        heldItem.GetComponent<Rigidbody>().isKinematic = false;
-        heldItem.GetComponent<Collider>().enabled = true;
-        //itemCollider.enabled = false;
+        heldItem.GetComponent<Rigidbody>().useGravity = true;
+        itemDropScript.enabled = false;
+        itemDropScript.dropitem = false;
+        itemDropScript = null;
         heldItem = null;
         isHolding = false;
     }
 
     void ThrowItem()
     {
-        //    heldItem.transform.SetParent(null);
-        //    isHolding = false;
-        //    heldItem.GetComponent<Rigidbody>().useGravity = true;
-        //    heldItem.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
-
-
-        heldItem.transform.SetParent(null);
-        heldItem.GetComponent<Rigidbody>().isKinematic = false;
-        heldItem.GetComponent<Collider>().enabled = true;
-        //itemCollider.enabled = false;
+        heldItem.GetComponent<Rigidbody>().useGravity = true;
         heldItem.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
-
+        itemDropScript.enabled = false;
+        itemDropScript.dropitem = false;
+        itemDropScript = null;
         heldItem = null;
         isHolding = false;
     }
