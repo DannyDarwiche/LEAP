@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MovingCharacter : MonoBehaviour
 {
+    public bool Grappling;
+
     [SerializeField, Range(0f, 100f)]
     float maxSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
@@ -17,26 +19,40 @@ public class MovingCharacter : MonoBehaviour
     float maxGroundAngle = 25f, maxStairsAngle = 50f;
     [SerializeField, Range(0f, 100f)]
     float maxSnapSpeed = 100f;
+
+    //The distance of the raycast that determines when the player should snap to angled surfaces
     [SerializeField, Min(0f)]
     float probeDistance = 1f;
+
+    //probeMask probes all layers to check if there's any object that count as a surface
+    //except for layers that are put on Ignore Raycast and Agent
     [SerializeField]
     LayerMask probeMask = -1, stairsMask = -1;
 
+    //velocity is used to override the velocity of the Rigidbody component
+    //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
     Vector3 velocity, desiredVelocity, contactNormal, steepNormal;
+
     Rigidbody body;
+
     bool desiredJump;
+
     int jumpPhase, groundContactCount, steepContactCount;
+
+    //minGroundDotProduct describes the maximum angle you can climb on a plain surface
+    //minStairsDotProduct describes the maximum angle you can climb on stairs
     float minGroundDotProduct, minStairsDotProduct;
-    int stepSinceLastGrounded, stepsSinceLastJump;
+
+    int stepsSinceLastGrounded, stepsSinceLastJump;
 
     bool OnGround => groundContactCount > 0;
     bool OnSteep => steepContactCount > 0;
-    private void OnValidate()
+    void OnValidate()
     {
         minGroundDotProduct = Mathf.Cos(maxGroundAngle * Mathf.Deg2Rad);
         minStairsDotProduct = Mathf.Cos(maxStairsAngle * Mathf.Deg2Rad);
     }
-    private void Awake()
+    void Awake()
     {
         body = GetComponent<Rigidbody>();
         OnValidate();
@@ -51,7 +67,7 @@ public class MovingCharacter : MonoBehaviour
 
         desiredJump |= Input.GetButtonDown("Jump");
     }
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         UpdateState();
         AdjustVelocity();
@@ -65,20 +81,20 @@ public class MovingCharacter : MonoBehaviour
         ClearState();
     }
 
-    private void ClearState()
+    void ClearState()
     {
         groundContactCount = steepContactCount = 0;
         contactNormal = steepNormal = Vector3.zero;
     }
 
-    private void UpdateState()
+    void UpdateState()
     {
-        stepSinceLastGrounded += 1;
+        stepsSinceLastGrounded += 1;
         stepsSinceLastJump += 1;
         velocity = body.velocity;
         if (OnGround || SnapToGround() || CheckSteepContacts())
         {
-            stepSinceLastGrounded = 0;
+            stepsSinceLastGrounded = 0;
             if (stepsSinceLastJump > 1)
                 jumpPhase = 0;
             if (groundContactCount > 1)
@@ -90,7 +106,7 @@ public class MovingCharacter : MonoBehaviour
         }
     }
 
-    private void Jump()
+    void Jump()
     {
         Vector3 jumpDirection;
         if (OnGround)
@@ -121,15 +137,15 @@ public class MovingCharacter : MonoBehaviour
         }
         velocity += jumpDirection * jumpSpeed;
     }
-    private void OnCollisionEnter(Collision collision)
+    void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
     }
-    private void OnCollisionStay(Collision collision)
+    void OnCollisionStay(Collision collision)
     {
         EvaluateCollision(collision);
     }
-    private void EvaluateCollision(Collision collision)
+    void EvaluateCollision(Collision collision)
     {
         float minDot = GetMinDot(collision.gameObject.layer);
         for (int i = 0; i < collision.contactCount; i++)
@@ -157,6 +173,11 @@ public class MovingCharacter : MonoBehaviour
         float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
+        if (Grappling)
+        {
+            desiredVelocity.x += currentX;
+            desiredVelocity.z += currentZ;
+        }
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
@@ -168,7 +189,7 @@ public class MovingCharacter : MonoBehaviour
     }
     bool SnapToGround()
     {
-        if (stepSinceLastGrounded > 1 || stepsSinceLastJump <= 2)
+        if (stepsSinceLastGrounded > 1 || stepsSinceLastJump <= 2)
         {
             return false;
         }
