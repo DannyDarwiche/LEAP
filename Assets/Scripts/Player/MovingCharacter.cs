@@ -18,9 +18,9 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField, Range(0f, 100f)]
     float maxAcceleration = 10f, maxAirAccelertaion = 1f;
     [SerializeField, Range(0f, 10f)]
-    float jumpHeight = 2f;
+    float jumpHeight = PlayerStats.jumpHeight;
     [SerializeField, Range(0, 5)]
-    int maxAirJumps = 0;
+    int maxAirJumps = PlayerStats.maxAirJumps;
     [SerializeField, Range(0f, 90f)]
     float maxGroundAngle = 25f, maxStairsAngle = 50f;
     [SerializeField, Range(0f, 100f)]
@@ -42,6 +42,8 @@ public class MovingCharacter : MonoBehaviour
     Rigidbody body;
 
     bool desiredJump;
+    bool sprint;
+    float maxSprintSpeed;
 
     int jumpPhase, groundContactCount, steepContactCount;
 
@@ -50,7 +52,7 @@ public class MovingCharacter : MonoBehaviour
     float minGroundDotProduct, minStairsDotProduct;
 
     int stepsSinceLastGrounded, stepsSinceLastJump;
-
+   
     bool OnGround => groundContactCount > 0;
     bool OnSteep => steepContactCount > 0;
     void OnValidate()
@@ -62,7 +64,7 @@ public class MovingCharacter : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         OnValidate();
-        
+        maxSprintSpeed = maxSpeed * 2;
     }
     void Update()
     {
@@ -70,10 +72,12 @@ public class MovingCharacter : MonoBehaviour
         playerInput.x = Input.GetAxis("Horizontal");
         playerInput.y = Input.GetAxis("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-        desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
+        sprint = Input.GetButton("Sprint") && PlayerStats.sprint;
+        float speed = sprint ? maxSprintSpeed : maxSpeed;
+        desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         StepAudio();
         AudioJump();
-        desiredJump |= Input.GetButtonDown("Jump");
+        desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump;
     }
     void FixedUpdate()
     {
@@ -120,7 +124,7 @@ public class MovingCharacter : MonoBehaviour
         Vector3 jumpDirection;
         if (OnGround)
             jumpDirection = contactNormal;
-        else if (OnSteep)
+        else if (OnSteep && PlayerStats.walljump)
         {
             jumpDirection = steepNormal;
             jumpPhase = 0;

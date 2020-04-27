@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static bool jump = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public static bool sprint = false;
+
+    public static float jumpHeight = 3;
+
+    public static int maxAirJumps = 0;
+
+    public static bool walljump = false;
 }
