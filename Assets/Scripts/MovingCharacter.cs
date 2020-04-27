@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class MovingCharacter : MonoBehaviour
 {
+    public bool Grappling;
+
     [SerializeField, Range(0f, 100f)]
     float maxSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
@@ -171,6 +173,11 @@ public class MovingCharacter : MonoBehaviour
         float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
+        if (Grappling)
+        {
+            desiredVelocity.x += currentX;
+            desiredVelocity.z += currentZ;
+        }
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
