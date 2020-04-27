@@ -7,6 +7,12 @@ public class MovingCharacter : MonoBehaviour
 {
     public bool Grappling;
 
+    [SerializeField]
+    AudioSource audioStep;
+
+    [SerializeField]
+    AudioSource audioJump;
+
     [SerializeField, Range(0f, 100f)]
     float maxSpeed = 10f;
     [SerializeField, Range(0f, 100f)]
@@ -56,6 +62,7 @@ public class MovingCharacter : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         OnValidate();
+        
     }
     void Update()
     {
@@ -64,7 +71,8 @@ public class MovingCharacter : MonoBehaviour
         playerInput.y = Input.GetAxis("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * maxSpeed;
-
+        StepAudio();
+        AudioJump();
         desiredJump |= Input.GetButtonDown("Jump");
     }
     void FixedUpdate()
@@ -85,6 +93,7 @@ public class MovingCharacter : MonoBehaviour
     {
         groundContactCount = steepContactCount = 0;
         contactNormal = steepNormal = Vector3.zero;
+        
     }
 
     void UpdateState()
@@ -137,6 +146,13 @@ public class MovingCharacter : MonoBehaviour
         }
         velocity += jumpDirection * jumpSpeed;
     }
+    void AudioJump()
+    {
+        if (Input.GetButtonDown("Jump") && !audioJump.isPlaying && OnGround)
+        {
+            audioJump.Play();
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
@@ -182,6 +198,18 @@ public class MovingCharacter : MonoBehaviour
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
         velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+    }
+    void StepAudio()
+    {
+        if (OnGround && desiredVelocity.magnitude > 0)
+        {
+            if (!audioStep.isPlaying)
+            {
+                audioStep.Play();
+            }
+        }
+        else
+            audioStep.Stop();
     }
     Vector3 ProjectOnContactPlane(Vector3 vector)
     {
