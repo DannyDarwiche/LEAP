@@ -592,7 +592,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16410
+  m_Name: pb_Mesh19496
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4895,6 +4895,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: -10, z: 2}
   moveLength: 15
   moveSpeed: 10
+  activated: 0
 --- !u!114 &567612757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9356,6 +9357,7 @@ MonoBehaviour:
   moveDirection: {x: 0, y: -1, z: 0}
   moveLength: 10
   moveSpeed: 20
+  activated: 0
 --- !u!1 &728115239
 GameObject:
   m_ObjectHideFlags: 0
@@ -9465,6 +9467,7 @@ MonoBehaviour:
   moveDirection: {x: 0, y: 1, z: 0}
   moveLength: 5
   moveSpeed: 5
+  activated: 0
 --- !u!1 &739956339 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4057229130305718362, guid: d187a72e357d77f4f80b6fa0e04e9bc1,
@@ -9486,6 +9489,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: -10, z: 2}
   moveLength: 12
   moveSpeed: 10
+  activated: 0
 --- !u!114 &739956347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10166,7 +10170,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh16604
+  m_Name: pb_Mesh19682
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -10687,7 +10691,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-8254
+  m_Name: pb_Mesh-37928
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -11689,6 +11693,7 @@ MonoBehaviour:
   moveDirection: {x: 1, y: 1, z: 1}
   moveLength: 10
   moveSpeed: 20
+  activated: 0
 --- !u!65 &1185150941
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15928,7 +15933,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 1788269377728665300, guid: 0d86fffc1f32a024bad0c566b4234586, type: 3}
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15992,6 +15997,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: 10, z: 2}
   moveLength: 5
   moveSpeed: 10
+  activated: 0
 --- !u!114 &1264622590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17057,6 +17063,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: 10, z: 2}
   moveLength: 7
   moveSpeed: 10
+  activated: 0
 --- !u!114 &1404467094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17609,6 +17616,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: 10, z: 2}
   moveLength: 1
   moveSpeed: 10
+  activated: 0
 --- !u!114 &1546726232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20352,6 +20360,7 @@ MonoBehaviour:
   moveDirection: {x: 2, y: 10, z: 2}
   moveLength: 9
   moveSpeed: 10
+  activated: 0
 --- !u!114 &1842025080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21490,6 +21499,7 @@ MonoBehaviour:
   moveDirection: {x: 1, y: 1, z: 1}
   moveLength: 10
   moveSpeed: 20
+  activated: 0
 --- !u!65 &2122903410
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -22263,6 +22273,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b3ca1f5cc0b0140aa50c62111780d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Grappling: 0
+  audioStep: {fileID: 0}
+  audioJump: {fileID: 0}
   maxSpeed: 11.5
   maxAcceleration: 63.9
   maxAirAccelertaion: 5
