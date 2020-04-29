@@ -32,7 +32,7 @@ public class balancingBarrel : MonoBehaviour
             {
                 Vector3 moveLerp = Vector3.Lerp(body.position, startPosition, Time.deltaTime);
                 body.MovePosition(moveLerp);
-                Quaternion rotationLerp = Quaternion.Lerp(body.rotation, startRotation, Time.deltaTime * 1000);
+                Quaternion rotationLerp = Quaternion.Lerp(body.rotation, startRotation, Time.deltaTime * 100);
                 body.MoveRotation(rotationLerp);
             }
         }
