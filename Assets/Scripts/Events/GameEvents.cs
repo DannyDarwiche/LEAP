@@ -16,7 +16,6 @@ public class GameEvents : MonoBehaviour
     }
 
     public event Action<int> OnButtonTriggerOn; 
-
     public void ButtonTriggerOn(int id)
     {
         if (OnButtonTriggerOn != null)
@@ -24,12 +23,24 @@ public class GameEvents : MonoBehaviour
     }
 
     public event Action<int> OnButtonTriggerOff;
-
     public void ButtonTriggerOff(int id)
     {
         if (OnButtonTriggerOff != null)
                 OnButtonTriggerOff(id);
     }
 
+    public event Action<int, float> OnPreasureplateTriggerOn;
+    public void PreasureplateTriggerOn(int id, float percentage)
+    {
+        if (OnPreasureplateTriggerOn != null)
+            OnPreasureplateTriggerOn(id,percentage);
+    }
+
+    public event Action<int, float> OnPreasureplateTriggerOff;
+    public void PreasureplatTriggerOff(int id, float percentage)
+    {
+        if (OnPreasureplateTriggerOff != null)
+            OnPreasureplateTriggerOff(id, percentage);
+    }
 
 }
