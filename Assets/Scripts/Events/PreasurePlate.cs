@@ -49,23 +49,23 @@ public class PreasurePlate : MonoBehaviour
     }
     void Update()
     {
-        if (offOrOn)
-        {
-            if(currentMass > 0)
-                foreach (MoveEvent linkedevent in linkedEvents)
-                    linkedevent.Activated();
-            else
-                foreach (MoveEvent linkedEvent in linkedEvents)
-                    linkedEvent.Deactivated();
+        //if (offOrOn)
+        //{
+        //    if(currentMass > 0)
+        //        foreach (MoveEvent linkedevent in linkedEvents)
+        //            linkedevent.Activated();
+        //    else
+        //        foreach (MoveEvent linkedEvent in linkedEvents)
+        //            linkedEvent.Deactivated();
 
-        }
-        else if(currentMass > 0)
-        {
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Activated(currentMass / expectedMass);
-        }
-        else
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Deactivated();
+        //}
+        //else if(currentMass > 0)
+        //{
+        //    foreach (MoveEvent linkedEvent in linkedEvents)
+        //        linkedEvent.Activated(currentMass / expectedMass);
+        //}
+        //else
+        //    foreach (MoveEvent linkedEvent in linkedEvents)
+        //        linkedEvent.Deactivated();
     }
 }

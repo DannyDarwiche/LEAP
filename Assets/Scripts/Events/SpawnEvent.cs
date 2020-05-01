@@ -7,6 +7,8 @@ public class SpawnEvent : MonoBehaviour
     public bool spawning;
 
     [SerializeField]
+    int id; 
+    [SerializeField]
     string spawnedObjectTag;
     [SerializeField, Range(0,1)]
     float spawnTime;
@@ -16,16 +18,21 @@ public class SpawnEvent : MonoBehaviour
     float minXRotation, maxXRotation, rotationStep;
     ObjectPooler objectpooler;
     float timer;
-    public void Activated()
+    public void Activated(int id)
     {
-        spawning = true;
+        if(id == this.id)
+            spawning = true;
     }
-    public void Deactivated()
+    public void Deactivated(int id)
     {
-        spawning = false;
+        if(id == this.id)
+            spawning = false;
     }
     void Start()
     {
+        GameEvents.currentInstance.OnButtonTriggerOn += Activated;
+        GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
+
         objectpooler = ObjectPooler.instance;
     }
     void FixedUpdate()

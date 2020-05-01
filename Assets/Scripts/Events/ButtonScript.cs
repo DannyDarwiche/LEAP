@@ -5,48 +5,29 @@ using UnityEngine;
 public class ButtonScript : MonoBehaviour
 {
     [SerializeField]
-    GameObject[] linkedObjects;
+    int id; 
 
-    MoveEvent[] linkedEvents;
-    bool activated;
-
+    bool activated; 
     void Start()
     {
-        linkedEvents = new MoveEvent[linkedObjects.Length];
-        for (int i = 0; i < linkedObjects.Length; i++)
-            linkedEvents[i] = linkedObjects[i].GetComponent<MoveEvent>();
+
     }
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Pickable") || collision.collider.CompareTag("Player"))
-        {
-            if (!activated)
-            {
-                foreach (MoveEvent linkedEvent in linkedEvents)
-                    linkedEvent.Activated();
-                activated = true;
-            }
-            else
-            {
-                foreach (MoveEvent linkedEvent in linkedEvents)
-                    linkedEvent.Deactivated();
-                activated = false;
-            }
-        }
-    }
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    if(collision.other.CompareTag("Player"))
+    //        GameEvents.currentInstance.ButtonTrigger();
+    //}
     void OnMouseDown()
     {
         if (!activated)
         {
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Activated();
+            GameEvents.currentInstance.ButtonTriggerOn(id);
             activated = true;
         }
         else
         {
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Deactivated();
-            activated = false;
+            GameEvents.currentInstance.ButtonTriggerOff(id);
+            activated = false; 
         }
     }
 }
