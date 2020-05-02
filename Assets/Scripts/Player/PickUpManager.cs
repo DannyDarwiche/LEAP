@@ -15,6 +15,7 @@ public class PickUpManager : MonoBehaviour
 
     //Can be split into seperate pickup/throw script
 
+    [SerializeField]
     float throwForce = 20;
     Vector3 objectPos;
     float distance;
