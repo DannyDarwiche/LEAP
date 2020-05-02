@@ -5,39 +5,28 @@ using UnityEngine;
 public class PreasurePlate : MonoBehaviour
 {
     [SerializeField]
+    int id;
+    [SerializeField]
     float expectedMass;
     [SerializeField]
     LayerMask layerMask;
-    [SerializeField]
-    GameObject[] linkedObjects;
     [SerializeField]
     bool offOrOn;
 
     float currentMass;
 
-    MoveEvent[] linkedEvents;
-    void Start()
-    {
-        linkedEvents = new MoveEvent[linkedObjects.Length];
-
-        for (int i = 0; i < linkedObjects.Length; i++)
-        {
-
-            linkedEvents[i] = linkedObjects[i].GetComponent<MoveEvent>();
-        }
-    }
 
     void OnTriggerEnter(Collider other)
     {
-        if (currentMass == expectedMass)
-            return;
-
         if ((layerMask == (layerMask | (1 << other.gameObject.layer))) || other.CompareTag("Player"))
         {
             if (other.attachedRigidbody == null)
                 return;
 
             currentMass += other.attachedRigidbody.mass;
+            float percentage = currentMass / expectedMass;
+            float activePercentage = Mathf.Clamp(percentage,0,1);
+            GameEvents.currentInstance.PreasureplateTriggerOn(id,activePercentage);
             Debug.Log(currentMass);
         }
     }
@@ -45,27 +34,7 @@ public class PreasurePlate : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         currentMass -= other.attachedRigidbody.mass;
+        GameEvents.currentInstance.PreasureplatTriggerOff(id, currentMass / expectedMass);
         Debug.Log(currentMass);
-    }
-    void Update()
-    {
-        if (offOrOn)
-        {
-            if(currentMass > 0)
-                foreach (MoveEvent linkedevent in linkedEvents)
-                    linkedevent.Activated();
-            else
-                foreach (MoveEvent linkedEvent in linkedEvents)
-                    linkedEvent.Deactivated();
-
-        }
-        else if(currentMass > 0)
-        {
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Activated(currentMass / expectedMass);
-        }
-        else
-            foreach (MoveEvent linkedEvent in linkedEvents)
-                linkedEvent.Deactivated();
     }
 }
