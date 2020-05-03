@@ -8,27 +8,10 @@ public class ButtonScript : MonoBehaviour
     int id; 
 
     bool activated; 
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("Collision");
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            if (!activated)
-            {
-                GameEvents.currentInstance.ButtonTriggerOn(id);
-                activated = true;
-            }
-            else
-            {
-                GameEvents.currentInstance.ButtonTriggerOff(id);
-                activated = false;
-            }
-        }
-    }
-
     //void OnCollisionEnter(Collision collision)
     //{
-    //    if (collision.transform != transform)
+    //    Debug.Log("Collision");
+    //    if (collision.gameObject.CompareTag("Player"))
     //    {
     //        if (!activated)
     //        {
@@ -42,6 +25,23 @@ public class ButtonScript : MonoBehaviour
     //        }
     //    }
     //}
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.transform != transform)
+        {
+            if (!activated)
+            {
+                GameEvents.currentInstance.ButtonTriggerOn(id);
+                activated = true;
+            }
+            else
+            {
+                GameEvents.currentInstance.ButtonTriggerOff(id);
+                activated = false;
+            }
+        }
+    }
 
     void OnMouseDown()
     {
