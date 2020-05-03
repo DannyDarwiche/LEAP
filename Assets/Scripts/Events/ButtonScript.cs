@@ -8,17 +8,26 @@ public class ButtonScript : MonoBehaviour
     int id; 
 
     bool activated; 
-    void Start()
+    void OnCollisionEnter(Collision collision)
     {
-
+        Debug.Log("Collision");
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            if (!activated)
+            {
+                GameEvents.currentInstance.ButtonTriggerOn(id);
+                activated = true;
+            }
+            else
+            {
+                GameEvents.currentInstance.ButtonTriggerOff(id);
+                activated = false;
+            }
+        }
     }
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    if(collision.other.CompareTag("Player"))
-    //        GameEvents.currentInstance.ButtonTrigger();
-    //}
     void OnMouseDown()
     {
+        Debug.Log("MousePress");
         if (!activated)
         {
             GameEvents.currentInstance.ButtonTriggerOn(id);

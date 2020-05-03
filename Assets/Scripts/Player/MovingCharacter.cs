@@ -137,7 +137,7 @@ public class MovingCharacter : MonoBehaviour
         }
         else
             return;
-
+        //velocity.y = 0;
         stepsSinceLastJump = 0;
         jumpPhase += 1;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);

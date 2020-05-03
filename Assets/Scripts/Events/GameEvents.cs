@@ -43,4 +43,11 @@ public class GameEvents : MonoBehaviour
             OnPreasureplateTriggerOff(id, percentage);
     }
 
+    public event Action<int> OnPuzzleSolvedTrigger;
+    public void PuzzleSolvedTrigger(int id)
+    {
+        if (OnPuzzleSolvedTrigger != null)
+            OnPuzzleSolvedTrigger(id);
+    }
+
 }
