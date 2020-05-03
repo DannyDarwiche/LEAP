@@ -19,7 +19,7 @@ public class Drop : MonoBehaviour
     {
         if (collision.collider.CompareTag("Ground") || collision.collider.CompareTag("Player"))
             return;
-        Debug.Log(body.velocity.magnitude);
+      //  Debug.Log(body.velocity.magnitude);
         if (collision.relativeVelocity.magnitude > dropForce)
         {
             Debug.Log("Dropped");
