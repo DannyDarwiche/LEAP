@@ -12,7 +12,7 @@ public class CarryRigidBodiesSensor : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Rigidbody body = other.attachedRigidbody;
-        if (body != null)
+        if (body != null && carrier.isActiveAndEnabled)
         {
             if (!rigidbodyList.Contains(body))
                 rigidbodyList.Add(body);

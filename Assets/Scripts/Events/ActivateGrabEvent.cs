@@ -11,13 +11,11 @@ public class ActivateGrabEvent : MonoBehaviour
     List<Rigidbody> grabbedBodyList = new List<Rigidbody>();
 
     Renderer grabRenderer;
-    Collider grabCollider;
     bool noGravity;
 
     void Start()
     {
         grabRenderer = GetComponent<MeshRenderer>();
-        grabCollider = GetComponent<Collider>();
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
     }
@@ -35,7 +33,6 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            grabCollider.enabled = true;
             magnet.enabled = true;
             grabRenderer.enabled = true;
             noGravity = true;
@@ -45,7 +42,6 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            grabCollider.enabled = false;
             magnet.enabled = false;
             grabRenderer.enabled = false;
             noGravity = false;
