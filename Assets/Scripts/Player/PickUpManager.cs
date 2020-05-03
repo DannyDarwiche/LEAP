@@ -58,7 +58,7 @@ public class PickUpManager : MonoBehaviour
 
         if (Physics.Raycast(transform.position, fwd, out hit, rayLength, layerMaskInteractable.value))
         {
-            if (hit.collider.CompareTag("Pickable"))
+            if (hit.collider.CompareTag("Pickable") || hit.collider.CompareTag("Torch"))
             {
                 raycastedObject = hit.collider.gameObject;
                 CrosshairActive();

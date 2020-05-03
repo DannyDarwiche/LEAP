@@ -18,7 +18,7 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField, Range(0f, 100f)]
     float maxAcceleration = 10f, maxAirAccelertaion = 1f;
     [SerializeField, Range(0f, 10f)]
-    float jumpHeight = PlayerStats.jumpHeight;
+    public float jumpHeight = PlayerStats.jumpHeight;
     [SerializeField, Range(0, 5)]
     int maxAirJumps = PlayerStats.maxAirJumps;
     [SerializeField, Range(0f, 90f)]

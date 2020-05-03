@@ -8,6 +8,7 @@ TagManager:
   - PickUpDest
   - Ground
   - Jump
+  - Torch
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - Player
   - Detailed
   - Stairs
-  - 
+  - Store
   - 
   - 
   - 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+    public static int upgradeTokens = 0;
+
     public static bool jump = false;
 
     public static bool sprint = false;
