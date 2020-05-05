@@ -15,6 +15,7 @@ public class DisableEnableEventPuzzle : MonoBehaviour
         objectRenderer = GetComponent<Renderer>();
         objectCollider = GetComponent<Collider>();
         GameEvents.currentInstance.OnPuzzleSolvedTrigger += Activated;
+        GameEvents.currentInstance.OnPuzzleFailedTrigger += Deactivated;
 
     }
     void Activated(int id)
@@ -23,6 +24,15 @@ public class DisableEnableEventPuzzle : MonoBehaviour
         {
             objectRenderer.enabled = false;
             objectCollider.enabled = false;
+        }
+    }
+
+    void Deactivated(int id)
+    {
+        if(id == this.id)
+        {
+            objectRenderer.enabled = true;
+            objectCollider.enabled = true;
         }
     }
 }

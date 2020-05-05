@@ -27,7 +27,6 @@ public class CarryRigidBodiesSensor : MonoBehaviour
             if (rigidbodyList.Contains(body))
                 rigidbodyList.Remove(body);
             carrier.TryRemoveBasedBySensors(body);
-            Debug.Log("Test");
         }
     }
 }

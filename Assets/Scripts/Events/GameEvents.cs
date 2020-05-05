@@ -50,4 +50,12 @@ public class GameEvents : MonoBehaviour
             OnPuzzleSolvedTrigger(id);
     }
 
+    public event Action<int> OnPuzzleFailedTrigger;
+
+    public void PuzzleFailedTrigger(int id)
+    {
+        if (OnPuzzleFailedTrigger != null)
+            OnPuzzleFailedTrigger(id);
+    }
+
 }
