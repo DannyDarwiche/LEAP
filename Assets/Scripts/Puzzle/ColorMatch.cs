@@ -12,6 +12,8 @@ public class ColorMatch : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.gameObject.name);
+        Debug.Log(collision.gameObject.GetComponent<Renderer>().material.color);
         if (collision.gameObject.GetComponent<Renderer>().material.color == platformRenderer.material.color)
             correctCube = true;
     }

@@ -94,7 +94,6 @@ public class MovingCharacter : MonoBehaviour
             desiredJump = false;
             Jump();
         }
-        Debug.Log(velocity);
         body.velocity = velocity;
         ClearState();
     }
