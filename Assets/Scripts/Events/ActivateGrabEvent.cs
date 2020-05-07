@@ -8,8 +8,8 @@ public class ActivateGrabEvent : MonoBehaviour
     int id;
     [SerializeField]
     CarryRigidbodies magnet;
-    List<Rigidbody> grabbedBodyList = new List<Rigidbody>();
 
+    List<Rigidbody> grabbedBodyList = new List<Rigidbody>();
     Renderer grabRenderer;
     bool noGravity;
 
@@ -19,16 +19,14 @@ public class ActivateGrabEvent : MonoBehaviour
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
     }
+
     void Update()
     {
         if (!noGravity && grabbedBodyList.Count > 0)
-        {
             foreach (Rigidbody body in grabbedBodyList)
-            {
                 body.useGravity = true;
-            }
-        }
     }
+
     void Activated(int id)
     {
         if (id == this.id)
@@ -38,6 +36,7 @@ public class ActivateGrabEvent : MonoBehaviour
             noGravity = true;
         }
     }
+
     void Deactivated(int id)
     {
         if (id == this.id)
@@ -47,6 +46,7 @@ public class ActivateGrabEvent : MonoBehaviour
             noGravity = false;
         }
     }
+
     void OnTriggerEnter(Collider other)
     {
         if (noGravity)
@@ -55,6 +55,7 @@ public class ActivateGrabEvent : MonoBehaviour
             other.attachedRigidbody.useGravity = false;
         }
     }
+
     void OnTriggerExit(Collider other)
     {
         if (noGravity)

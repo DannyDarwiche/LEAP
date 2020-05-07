@@ -30,15 +30,6 @@ public class PickUpManager : MonoBehaviour
 
     private void Update()
     {
-        //if (isHolding)
-        //{
-        //    heldItem.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //    heldItem.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        //    //heldItem.transform.position = holdPos.transform.position;
-        //}
-
-
-
         if ((Input.GetMouseButtonDown(0) && isHolding))
         {
             DropItem();
@@ -96,9 +87,6 @@ public class PickUpManager : MonoBehaviour
                 DropItem();
                 return;
             }
-
-            //Vector3 direction = holdPos.transform.position - heldItem.transform.position;
-            //direction.Normalize();
 
             Vector3 movementLerp = Vector3.Lerp(heldItem.transform.position, holdPos.transform.position, Time.deltaTime*10);
             

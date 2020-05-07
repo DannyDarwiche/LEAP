@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MovingCharacter : MonoBehaviour
 {
-    public bool Grappling;
+    public bool grappling;
 
     [SerializeField]
     AudioSource audioStep;
@@ -208,7 +208,7 @@ public class MovingCharacter : MonoBehaviour
         float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
-        if (Grappling)
+        if (grappling)
         {
             desiredVelocity.x += currentX;
             desiredVelocity.z += currentZ;

@@ -13,19 +13,8 @@ public class Destructible : MonoBehaviour
 
     public void Break()
     {
-        Instantiate(destroyedVersion, transform.position, destroyedVersion.transform.rotation);
+        GameObject gameObject = Instantiate(destroyedVersion, transform.position, destroyedVersion.transform.rotation);
+        gameObject.transform.localScale = newScale;
         Destroy(gameObject);
     }
-
-    void Start()
-    {
-        destroyedVersion.transform.localScale = newScale;
-    }
-
-    //void OnMouseDown()
-    //{
-    //    Instantiate(destroyedVersion, transform.position, transform.rotation);
-    //    Destroy(gameObject);
-    //}
-
 }

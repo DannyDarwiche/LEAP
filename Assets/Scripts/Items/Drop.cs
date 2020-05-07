@@ -6,8 +6,10 @@ using UnityEngine;
 public class Drop : MonoBehaviour
 {
     public bool dropitem;
+
     [SerializeField, Range(0, 50)]
     float dropForce;
+
     Rigidbody body;
 
     void Start()
@@ -19,16 +21,11 @@ public class Drop : MonoBehaviour
     {
         if (collision.collider.CompareTag("Ground") || collision.collider.CompareTag("Player"))
             return;
-      //  Debug.Log(body.velocity.magnitude);
+
         if (collision.relativeVelocity.magnitude > dropForce)
-        {
-            Debug.Log("Dropped");
             dropitem = true;
-        }
+
         if (collision.impulse.magnitude > dropForce)
-        {
-            Debug.Log("Dropped");
             dropitem = true;
-        }
     }
 }

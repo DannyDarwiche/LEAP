@@ -16,8 +16,8 @@ public class DisableEnableEventPuzzle : MonoBehaviour
         objectCollider = GetComponent<Collider>();
         GameEvents.currentInstance.OnPuzzleSolvedTrigger += Activated;
         GameEvents.currentInstance.OnPuzzleFailedTrigger += Deactivated;
-
     }
+
     void Activated(int id)
     {
         if(id == this.id)

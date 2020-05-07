@@ -19,6 +19,7 @@ public class CarryRigidBodiesSensor : MonoBehaviour
             carrier.Add(body);
         }
     }
+
     void OnTriggerExit(Collider other)
     {
         Rigidbody body = other.attachedRigidbody;

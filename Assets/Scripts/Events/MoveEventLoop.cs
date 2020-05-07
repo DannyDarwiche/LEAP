@@ -6,16 +6,13 @@ public class MoveEventLoop : MonoBehaviour
 {
     [SerializeField]
     int id;
-
-    int activeState; 
-
     [SerializeField]
     Vector3 moveDirection;
     [SerializeField]
     float moveLength, moveSpeed;
 
-    public bool activated;
-
+    bool activated;
+    int activeState;
     Vector3 startPosition;
 
     public void Activated(int id)
@@ -26,15 +23,16 @@ public class MoveEventLoop : MonoBehaviour
             activated = true;
         }
     }
+
     public void Deactivated(int id)
     {
-        if(id == this.id)
+        if (id == this.id)
         {
             activeState = 0;
             activated = false;
         }
-
     }
+
     void Start()
     {
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
@@ -42,7 +40,6 @@ public class MoveEventLoop : MonoBehaviour
         startPosition = transform.position;
         moveDirection.Normalize();
     }
-
 
     void Update()
     {
@@ -56,6 +53,7 @@ public class MoveEventLoop : MonoBehaviour
         if (transform.position == startPosition + maxMove && activated)
             activeState = 1 - activeState;
     }
+
     void OnDestroy()
     {
         GameEvents.currentInstance.OnButtonTriggerOn -= Activated;

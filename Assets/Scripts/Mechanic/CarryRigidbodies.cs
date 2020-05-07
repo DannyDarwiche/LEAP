@@ -29,6 +29,7 @@ public class CarryRigidbodies : MonoBehaviour
         if (rigidbodyList.Contains(rb))
             rigidbodyList.Remove(rb);
     }
+
     public bool TryRemoveBasedBySensors(Rigidbody body)
     {
         for (int i = 0; i < sensorList.Count; i++)
@@ -40,6 +41,7 @@ public class CarryRigidbodies : MonoBehaviour
         Remove(body);
         return true;
     }
+
     void Start()
     {
         lastPosition = transform.position;
@@ -51,16 +53,14 @@ public class CarryRigidbodies : MonoBehaviour
                 sensor.carrier = this;
                 sensorList.Add(sensor);
             }
-            if(sensorList.Count == 0)
-            {
+            if (sensorList.Count == 0)
                 Debug.LogError("You selected useSensors but you dont have any sensors in the game object");
-            }
         }
     }
 
     void LateUpdate()
     {
-        if(rigidbodyList.Count > 0)
+        if (rigidbodyList.Count > 0)
         {
             Vector3 velocity = transform.position - lastPosition;
             Vector3 angularVelocity = transform.eulerAngles - lastEulerAngles;
@@ -74,39 +74,37 @@ public class CarryRigidbodies : MonoBehaviour
         lastPosition = transform.position;
         lastEulerAngles = transform.eulerAngles;
     }
+
     void OnCollisionEnter(Collision collision)
     {
         if (useSensors)
             return;
         Rigidbody body = collision.collider.attachedRigidbody;
-        if(body != null)
-        {
+        if (body != null)
             Add(body);
-        }
-        
     }
+
     void OnCollisionExit(Collision collision)
     {
         if (useSensors)
             return;
+
         Rigidbody body = collision.collider.attachedRigidbody;
         if (body != null)
-        {
             Remove(body);
-        }
     }
 
     void RotateRigidbody(Rigidbody body, Vector3 angularVelocity)
     {
         Quaternion rotationQuaternion = Quaternion.Euler(angularVelocity);
         Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rotationQuaternion);
-        Vector3 newPosition = rotationMatrix.MultiplyVector(body.position-transform.position);
-        body.MovePosition(newPosition+transform.position);
+        Vector3 newPosition = rotationMatrix.MultiplyVector(body.position - transform.position);
+        body.MovePosition(newPosition + transform.position);
     }
 
     void OnDisable()
     {
-        if(rigidbodyList.Count > 0)
+        if (rigidbodyList.Count > 0)
         {
             foreach (Rigidbody body in rigidbodyList)
                 body.useGravity = true;

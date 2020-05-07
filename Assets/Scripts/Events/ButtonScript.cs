@@ -5,26 +5,13 @@ using UnityEngine;
 public class ButtonScript : MonoBehaviour
 {
     [SerializeField]
-    int id; 
+    int id;
+    [SerializeField]
+    GameObject player;
+    [SerializeField]
+    float pressDistance;
 
     bool activated; 
-    //void OnCollisionEnter(Collision collision)
-    //{
-    //    Debug.Log("Collision");
-    //    if (collision.gameObject.CompareTag("Player"))
-    //    {
-    //        if (!activated)
-    //        {
-    //            GameEvents.currentInstance.ButtonTriggerOn(id);
-    //            activated = true;
-    //        }
-    //        else
-    //        {
-    //            GameEvents.currentInstance.ButtonTriggerOff(id);
-    //            activated = false;
-    //        }
-    //    }
-    //}
 
     void OnCollisionEnter(Collision collision)
     {
@@ -45,16 +32,18 @@ public class ButtonScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("MousePress");
-        if (!activated)
+        if (Vector3.Distance(player.transform.position, transform.position) <= pressDistance)
         {
-            GameEvents.currentInstance.ButtonTriggerOn(id);
-            activated = true;
-        }
-        else
-        {
-            GameEvents.currentInstance.ButtonTriggerOff(id);
-            activated = false; 
+            if (!activated)
+            {
+                GameEvents.currentInstance.ButtonTriggerOn(id);
+                activated = true;
+            }
+            else
+            {
+                GameEvents.currentInstance.ButtonTriggerOff(id);
+                activated = false;
+            }
         }
     }
 }
