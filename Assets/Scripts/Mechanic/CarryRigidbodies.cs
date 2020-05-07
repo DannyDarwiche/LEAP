@@ -101,14 +101,4 @@ public class CarryRigidbodies : MonoBehaviour
         Vector3 newPosition = rotationMatrix.MultiplyVector(body.position - transform.position);
         body.MovePosition(newPosition + transform.position);
     }
-
-    void OnDisable()
-    {
-        if (rigidbodyList.Count > 0)
-        {
-            foreach (Rigidbody body in rigidbodyList)
-                body.useGravity = true;
-            rigidbodyList.Clear();
-        }
-    }
 }

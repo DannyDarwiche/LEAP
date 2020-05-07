@@ -7,7 +7,7 @@ public class ActivateGrabEvent : MonoBehaviour
     [SerializeField]
     int id;
     [SerializeField]
-    CarryRigidbodies magnet;
+    CarryRigidBodiesSensor sensor;
 
     List<Rigidbody> grabbedBodyList = new List<Rigidbody>();
     Renderer grabRenderer;
@@ -31,7 +31,7 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            magnet.enabled = true;
+            sensor.enabled = true;
             grabRenderer.enabled = true;
             noGravity = true;
         }
@@ -41,7 +41,7 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            magnet.enabled = false;
+            sensor.enabled = false;
             grabRenderer.enabled = false;
             noGravity = false;
         }
