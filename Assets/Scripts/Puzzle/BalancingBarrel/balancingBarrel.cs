@@ -13,7 +13,7 @@ public class balancingBarrel : MonoBehaviour
 
     Vector3 startPosition;
     Quaternion startRotation;
-    bool addforce, done;
+    bool addforce;
 
     void Start()
     {
@@ -25,9 +25,7 @@ public class balancingBarrel : MonoBehaviour
         if (started)
         {
             if (addforce)
-            {
                 body.AddTorque(transform.up, ForceMode.Acceleration);
-            }
             else
             {
                 Vector3 moveLerp = Vector3.Lerp(body.position, startPosition, Time.deltaTime);

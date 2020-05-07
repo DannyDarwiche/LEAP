@@ -6,38 +6,29 @@ using UnityEngine.UI;
 
 public class PickUpManager : MonoBehaviour
 {
-    private GameObject raycastedObject;
 
-    [SerializeField] private int rayLength = 10;
-    [SerializeField] private LayerMask layerMaskInteractable;
-    [SerializeField] private Image uiCrosshair;
-    
-
-    //Can be split into seperate pickup/throw script
-
+    [SerializeField] 
+    private int rayLength = 10;
+    [SerializeField] 
+    private LayerMask layerMaskInteractable;
+    [SerializeField] 
+    private Image uiCrosshair;
     [SerializeField]
     float throwForce = 20;
-    Vector3 objectPos;
-    float distance;
-    Drop itemDropScript;
+    [SerializeField]
+    GameObject holdPos;
 
-    private bool canHold = true;
-    private GameObject heldItem;
-    public GameObject holdPos;
-    //public Collider itemCollider;
-    private bool isHolding = false;
-    //public Camera cam;
+    Drop itemDropScript;
+    GameObject raycastedObject;
+    GameObject heldItem;
+    bool isHolding = false;
 
     private void Update()
     {
         if ((Input.GetMouseButtonDown(0) && isHolding))
-        {
             DropItem();
-        }
         else if (Input.GetMouseButtonDown(1) && isHolding)
-        {
             ThrowItem();
-        }
         else if (isHolding == false)
             Raycast();
     }
@@ -55,15 +46,11 @@ public class PickUpManager : MonoBehaviour
                 CrosshairActive();
 
                 if (Input.GetMouseButtonDown(0))
-                {
                     PickUp();
-                }
             }
         }
         else
-        {
             CrosshairNormal();
-        }
     }
 
     void FixedUpdate()
@@ -72,9 +59,7 @@ public class PickUpManager : MonoBehaviour
         {
             if (itemDropScript.dropitem)
             {
-
                 DropItem();
-                
                 return;
             }
 
@@ -83,16 +68,15 @@ public class PickUpManager : MonoBehaviour
             float distance = Vector3.Distance(heldItem.transform.position, holdPos.transform.position);
             if (distance > 2)
             {
-
                 DropItem();
                 return;
             }
 
             Vector3 movementLerp = Vector3.Lerp(heldItem.transform.position, holdPos.transform.position, Time.deltaTime*10);
-            
             heldItem.GetComponent<Rigidbody>().MovePosition(movementLerp);
         }
     }
+
     void PickUp()
     {
         isHolding = true;
