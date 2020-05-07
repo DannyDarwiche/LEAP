@@ -106,8 +106,11 @@ public class CarryRigidbodies : MonoBehaviour
 
     void OnDisable()
     {
-        foreach (Rigidbody body in rigidbodyList)
-            body.useGravity = true;
-        rigidbodyList.Clear();
+        if(rigidbodyList.Count > 0)
+        {
+            foreach (Rigidbody body in rigidbodyList)
+                body.useGravity = true;
+            rigidbodyList.Clear();
+        }
     }
 }
