@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class PickUpManager : MonoBehaviour
 {
-
     [SerializeField] 
     private int rayLength = 10;
     [SerializeField] 
