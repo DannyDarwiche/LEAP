@@ -35,9 +35,13 @@ public class CarryRigidBodiesSensor : MonoBehaviour
     {
         if (rigidbodyList.Count > 0)
         {
-            foreach (Rigidbody body in rigidbodyList)
-                body.useGravity = true;
+            List<Rigidbody> tempBodyList = new List<Rigidbody>(rigidbodyList);
             rigidbodyList.Clear();
+            foreach (Rigidbody body in tempBodyList)
+            {
+                body.useGravity = true;
+                carrier.TryRemoveBasedBySensors(body);
+            }
         }
     }
 }
