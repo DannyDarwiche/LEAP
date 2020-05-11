@@ -12,22 +12,36 @@ public class CarryRigidBodiesSensor : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         Rigidbody body = other.attachedRigidbody;
-        if (body != null && carrier.isActiveAndEnabled)
+        if (body != null && carrier.isActiveAndEnabled && body != carrier)
         {
             if (!rigidbodyList.Contains(body))
                 rigidbodyList.Add(body);
             carrier.Add(body);
         }
     }
+
     void OnTriggerExit(Collider other)
     {
         Rigidbody body = other.attachedRigidbody;
-        if (body != null)
+        if (body != null && body != carrier)
         {
             if (rigidbodyList.Contains(body))
                 rigidbodyList.Remove(body);
             carrier.TryRemoveBasedBySensors(body);
-            Debug.Log("Test");
+        }
+    }
+
+    void OnDisable()
+    {
+        if (rigidbodyList.Count > 0)
+        {
+            List<Rigidbody> tempBodyList = new List<Rigidbody>(rigidbodyList);
+            rigidbodyList.Clear();
+            foreach (Rigidbody body in tempBodyList)
+            {
+                body.useGravity = true;
+                carrier.TryRemoveBasedBySensors(body);
+            }
         }
     }
 }

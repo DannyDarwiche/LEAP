@@ -4,30 +4,21 @@ using UnityEngine;
 
 public class SpawnEvent : MonoBehaviour
 {
-    public bool spawning;
-
     [SerializeField]
-    int id; 
+    int id;
     [SerializeField]
     string spawnedObjectTag;
-    [SerializeField, Range(0,1)]
+    [SerializeField, Range(0, 1)]
     float spawnTime;
     [SerializeField, Range(0, 100)]
     float spawnedObjectLifeTime;
     [SerializeField]
     float minXRotation, maxXRotation, rotationStep;
+
+    bool spawning;
     ObjectPooler objectpooler;
     float timer;
-    public void Activated(int id)
-    {
-        if(id == this.id)
-            spawning = true;
-    }
-    public void Deactivated(int id)
-    {
-        if(id == this.id)
-            spawning = false;
-    }
+
     void Start()
     {
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
@@ -35,6 +26,7 @@ public class SpawnEvent : MonoBehaviour
 
         objectpooler = ObjectPooler.instance;
     }
+
     void FixedUpdate()
     {
         if (spawning)
@@ -46,5 +38,17 @@ public class SpawnEvent : MonoBehaviour
                 timer = 0;
             }
         }
+    }
+
+    void Activated(int id)
+    {
+        if (id == this.id)
+            spawning = true;
+    }
+
+    void Deactivated(int id)
+    {
+        if (id == this.id)
+            spawning = false;
     }
 }

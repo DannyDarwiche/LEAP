@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RotateEvent : MonoBehaviour
 {
-
     [SerializeField]
     int id;
     [SerializeField]
@@ -19,6 +18,7 @@ public class RotateEvent : MonoBehaviour
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
     }
+
     void Update()
     {
         if(activated)
@@ -30,10 +30,10 @@ public class RotateEvent : MonoBehaviour
         if (id == this.id)
             activated = true;
     }
+
     void Deactivated(int id)
     {
         if (id == this.id)
             activated = false;
     }
-
 }

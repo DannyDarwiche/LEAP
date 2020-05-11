@@ -27,6 +27,7 @@ public class ObjectPooler : MonoBehaviour
 
         return objectToSpawn;
     }
+
     void Awake()
     {
         if (instance == null)
@@ -34,6 +35,7 @@ public class ObjectPooler : MonoBehaviour
         else
             Debug.LogWarning("Attempted singleton is used more than once");
     }
+
     void Start()
     {
         poolDictionary = new Dictionary<string, Queue<GameObject>>();

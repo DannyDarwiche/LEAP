@@ -7,12 +7,10 @@ public class GameEvents : MonoBehaviour
 {
     public static GameEvents currentInstance;
 
-
     void Awake()
     {
         if(currentInstance == null)
             currentInstance = this; 
-
     }
 
     public event Action<int> OnButtonTriggerOn; 
@@ -50,4 +48,10 @@ public class GameEvents : MonoBehaviour
             OnPuzzleSolvedTrigger(id);
     }
 
+    public event Action<int> OnPuzzleFailedTrigger;
+    public void PuzzleFailedTrigger(int id)
+    {
+        if (OnPuzzleFailedTrigger != null)
+            OnPuzzleFailedTrigger(id);
+    }
 }

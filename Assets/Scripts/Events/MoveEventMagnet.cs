@@ -10,7 +10,9 @@ public class MoveEventMagnet : MonoBehaviour
     Vector3 moveDirection;
     [SerializeField]
     float moveSpeed;
+
     bool active;
+
     void Start()
     {
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
@@ -27,12 +29,11 @@ public class MoveEventMagnet : MonoBehaviour
     {
         if (id == this.id)
             active = true;
-
     }
+
     void Deactivated(int id)
     {
         if (id == this.id)
             active = false;
-
     }
 }

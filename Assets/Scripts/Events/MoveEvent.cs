@@ -6,16 +6,13 @@ public class MoveEvent : MonoBehaviour
 {
     [SerializeField]
     int id;
-
-    int activeState; 
-
     [SerializeField]
     Vector3 moveDirection;
     [SerializeField]
     float moveLength, moveSpeed;
 
-    public bool activated;
-
+    bool activated;
+    int activeState;
     Vector3 startPosition;
 
     public void Activated(int id)
@@ -26,15 +23,16 @@ public class MoveEvent : MonoBehaviour
             activated = true;
         }
     }
+
     public void Deactivated(int id)
     {
-        if(id == this.id)
+        if (id == this.id)
         {
             activeState = 0;
             activated = false;
         }
-
     }
+
     void Start()
     {
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
@@ -43,17 +41,17 @@ public class MoveEvent : MonoBehaviour
         moveDirection.Normalize();
     }
 
-
     void Update()
     {
-            Vector3 maxMove = moveDirection * activeState * moveLength;
-            float maxSpeedChange = moveSpeed * Time.deltaTime;
-            float newX = Mathf.MoveTowards(transform.position.x, startPosition.x + maxMove.x, maxSpeedChange);
-            float newY = Mathf.MoveTowards(transform.position.y, startPosition.y + maxMove.y, maxSpeedChange);
-            float newZ = Mathf.MoveTowards(transform.position.z, startPosition.z + maxMove.z, maxSpeedChange);
-            Vector3 moveDistance = new Vector3(newX, newY, newZ);
-            transform.SetPositionAndRotation(moveDistance, transform.rotation);
+        Vector3 maxMove = moveDirection * activeState * moveLength;
+        float maxSpeedChange = moveSpeed * Time.deltaTime;
+        float newX = Mathf.MoveTowards(transform.position.x, startPosition.x + maxMove.x, maxSpeedChange);
+        float newY = Mathf.MoveTowards(transform.position.y, startPosition.y + maxMove.y, maxSpeedChange);
+        float newZ = Mathf.MoveTowards(transform.position.z, startPosition.z + maxMove.z, maxSpeedChange);
+        Vector3 moveDistance = new Vector3(newX, newY, newZ);
+        transform.SetPositionAndRotation(moveDistance, transform.rotation);
     }
+
     void OnDestroy()
     {
         GameEvents.currentInstance.OnButtonTriggerOn -= Activated;

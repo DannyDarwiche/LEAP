@@ -10,6 +10,7 @@ public class Door : MonoBehaviour
     Animator animator;
 
     bool openNeg, openPos;
+
     void OnMouseDown()
     {
         float distance = Vector3.Distance(this.transform.position, player.transform.position);

@@ -16,8 +16,8 @@ public class DisableEnableEvent : MonoBehaviour
         objectCollider = GetComponent<Collider>();
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
-
     }
+
     void Activated(int id)
     {
         if(id == this.id)
@@ -26,6 +26,7 @@ public class DisableEnableEvent : MonoBehaviour
             objectCollider.enabled = false;
         }
     }
+
     void Deactivated(int id)
     {
         if (id == this.id)
@@ -33,6 +34,5 @@ public class DisableEnableEvent : MonoBehaviour
             objectRenderer.enabled = true;
             objectCollider.enabled = true;
         }
-
     }
 }

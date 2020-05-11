@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class RotateEventPP : MonoBehaviour
 {
-
     [SerializeField]
     int id;
     [SerializeField]
@@ -19,6 +18,7 @@ public class RotateEventPP : MonoBehaviour
         GameEvents.currentInstance.OnPreasureplateTriggerOn += Activated;
         GameEvents.currentInstance.OnPreasureplateTriggerOff += Deactivated;
     }
+
     void Update()
     {
         if(activated)
@@ -30,11 +30,11 @@ public class RotateEventPP : MonoBehaviour
         if (id == this.id)
             activated = true;
     }
+
     void Deactivated(int id, float percentage)
     {
         if (id == this.id)
             if(percentage == 0)
                 activated = false;
     }
-
 }
