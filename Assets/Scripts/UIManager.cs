@@ -7,29 +7,21 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI storeItemPrice;
-
     [SerializeField]
     TextMeshProUGUI storeItemName;
-
     [SerializeField]
     TextMeshProUGUI storeItemDescription;
-
     [SerializeField]
     TextMeshProUGUI playerTokenCount;
-
     [SerializeField]
     TextMeshProUGUI upgradeAcquiredName;
-
     [SerializeField]
     TextMeshProUGUI upgradeAcquiredDescription;
-
     [SerializeField]
     LayerMask storeLayer;
 
     bool displayAcquiredUpgrade = false;
-
     float acquiredUITimer = 0;
-
     float acquiredUITimeDelay = 5f;
 
     void Awake()
@@ -82,9 +74,7 @@ public class UIManager : MonoBehaviour
             playerTokenCount.text = "Tokens Left: " + PlayerStats.upgradeTokens.ToString();
         }
         else
-        {
             SetActive(false);
-        }
     }
 
     void SetActive(bool status)

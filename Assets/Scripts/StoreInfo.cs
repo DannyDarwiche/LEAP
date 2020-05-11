@@ -4,14 +4,10 @@ using UnityEngine;
 
 public class StoreInfo : MonoBehaviour
 {
-    //Scriptable objects?
-
     [SerializeField]
     int price;
-
     [SerializeField]
     string upgradeName;
-
     [SerializeField]
     string upgradeDescription;
 

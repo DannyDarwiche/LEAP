@@ -9,6 +9,7 @@ public class ColorPuzzle : MonoBehaviour
     int id;
     [SerializeField]
     ColorMatch[] colorMatches;
+
     bool completed;
     bool firstcall = true;
     void Update()

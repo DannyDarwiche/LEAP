@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml.XPath;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.VFX;
 
 public class CarryRigidbodies : MonoBehaviour
 {
@@ -100,15 +96,5 @@ public class CarryRigidbodies : MonoBehaviour
         Matrix4x4 rotationMatrix = Matrix4x4.Rotate(rotationQuaternion);
         Vector3 newPosition = rotationMatrix.MultiplyVector(body.position - transform.position);
         body.MovePosition(newPosition + transform.position);
-    }
-
-    void OnDisable()
-    {
-        if (rigidbodyList.Count > 0)
-        {
-            foreach (Rigidbody body in rigidbodyList)
-                body.useGravity = true;
-            rigidbodyList.Clear();
-        }
     }
 }

@@ -7,7 +7,9 @@ public class ActivateGrabEvent : MonoBehaviour
     [SerializeField]
     int id;
     [SerializeField]
-    CarryRigidbodies magnet;
+    CarryRigidBodiesSensor sensor;
+    [SerializeField]
+    Collider sensorArea;
 
     List<Rigidbody> grabbedBodyList = new List<Rigidbody>();
     Renderer grabRenderer;
@@ -31,9 +33,13 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            magnet.enabled = true;
+            sensorArea.enabled = true;
+            sensor.enabled = true;
             grabRenderer.enabled = true;
             noGravity = true;
+            foreach (Rigidbody rigidbody in grabbedBodyList)
+                rigidbody.useGravity = true;
+            grabbedBodyList.Clear();
         }
     }
 
@@ -41,7 +47,8 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (id == this.id)
         {
-            magnet.enabled = false;
+            sensor.enabled = false;
+            sensorArea.enabled = false;
             grabRenderer.enabled = false;
             noGravity = false;
         }
@@ -60,7 +67,7 @@ public class ActivateGrabEvent : MonoBehaviour
     {
         if (noGravity)
         {
-            grabbedBodyList.Add(other.attachedRigidbody);
+            grabbedBodyList.Remove(other.attachedRigidbody);
             other.attachedRigidbody.useGravity = true;
         }
     }
