@@ -52,7 +52,7 @@ public class MovingCharacter : MonoBehaviour
     float minGroundDotProduct, minStairsDotProduct;
 
     int stepsSinceLastGrounded, stepsSinceLastJump;
-   
+
     bool OnGround => groundContactCount > 0;
     bool OnSteep => steepContactCount > 0;
     void OnValidate()
@@ -72,7 +72,7 @@ public class MovingCharacter : MonoBehaviour
         playerInput.x = Input.GetAxis("Horizontal");
         playerInput.y = Input.GetAxis("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-        sprint = Input.GetButton("Sprint") && PlayerStats.sprint;
+        sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
         float speed = sprint ? maxSprintSpeed : maxSpeed;
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         StepAudio();
@@ -102,7 +102,7 @@ public class MovingCharacter : MonoBehaviour
     {
         groundContactCount = steepContactCount = 0;
         contactNormal = steepNormal = Vector3.zero;
-        
+
     }
 
     void UpdateState()
@@ -133,28 +133,43 @@ public class MovingCharacter : MonoBehaviour
     {
         Vector3 jumpDirection;
         if (OnGround)
-            jumpDirection = contactNormal;
+            //jumpDirection = contactNormal;
+            jumpDirection = Vector3.up;
         else if (OnSteep && PlayerStats.walljump)
         {
-            jumpDirection = steepNormal;
+            //jumpDirection = steepNormal;
+            //jumpDirection = (steepNormal * 2 + Vector3.up).normalized;
+
+            //velocity = Vector3.zero;
+            body.AddForce((steepNormal + Vector3.up) * jumpHeight * 40, ForceMode.Impulse);
+
             jumpPhase = 0;
+
+            return;
         }
-        else if (jumpPhase <= maxAirJumps)
+        else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
         {
             if (jumpPhase == 0)
                 jumpPhase = 1;
-            jumpDirection = contactNormal;
+
+            if (velocity.y < 0)
+                velocity.y = 0;
+
+
+            //jumpDirection = contactNormal;
+            jumpDirection = Vector3.up;
         }
         else
             return;
-        //velocity.y = 0;
+
+
         stepsSinceLastJump = 0;
         jumpPhase += 1;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
-        jumpDirection = (jumpDirection + Vector3.up).normalized;
+        //jumpDirection = (jumpDirection + Vector3.up).normalized;
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
-        if (alignedSpeed > 0f)
-            jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+        //if (alignedSpeed > 0f)
+        //    jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
         velocity += jumpDirection * jumpSpeed;
     }
     void AudioJump()
@@ -200,19 +215,25 @@ public class MovingCharacter : MonoBehaviour
      */
     void AdjustVelocity()
     {
+        if (!OnGround)
+            return;
+
         Vector3 xAxis = ProjectOnContactPlane(transform.right).normalized;
         Vector3 zAxis = ProjectOnContactPlane(transform.forward).normalized;
 
         float currentX = Vector3.Dot(velocity, xAxis);
         float currentZ = Vector3.Dot(velocity, zAxis);
+        
         float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
-        if (grappling)
-        {
-            desiredVelocity.x += currentX;
-            desiredVelocity.z += currentZ;
-        }
+        //if (grappling)
+        //{
+
+        //    desiredVelocity.x += currentX;
+        //    desiredVelocity.z += currentZ;
+        //}
+
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
