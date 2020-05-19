@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class MovingCharacter : MonoBehaviour
 {
+    [HideInInspector]
+    public List<CollidedWall> collidedWallsList;
+
+    [HideInInspector]
     public bool grappling;
 
     [SerializeField]
@@ -35,15 +39,22 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField]
     LayerMask probeMask = -1, stairsMask = -1;
 
+    [SerializeField]
+    float wallJumpCooldown = 1f;
+
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
     Vector3 velocity, desiredVelocity, contactNormal, steepNormal;
+
+    CollidedWall currentWall;
 
     Rigidbody body;
 
     bool desiredJump;
     bool sprint;
+    float speed;
     float maxSprintSpeed;
+    float wallJumpTimer;
 
     int jumpPhase, groundContactCount, steepContactCount;
 
@@ -64,17 +75,28 @@ public class MovingCharacter : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         OnValidate();
-        maxSprintSpeed = maxSpeed * 2;
+        speed = maxSpeed;
+        maxSprintSpeed = maxSpeed * 2f;
+        collidedWallsList = new List<CollidedWall>();
+        wallJumpTimer = 0f;
     }
     void Update()
     {
+        //for (int i = 0; i < collidedWallsList.Count; i++)
+        //{
+        //    collidedWallsList[i].RemoveFromList();
+        //}
+
         Vector2 playerInput;
         playerInput.x = Input.GetAxis("Horizontal");
         playerInput.y = Input.GetAxis("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
         sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
-        float speed = sprint ? maxSprintSpeed : maxSpeed;
+        speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.deltaTime);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
+        if (wallJumpTimer >= 0)
+            wallJumpTimer -= Time.deltaTime;
+
         StepAudio();
         AudioJump();
 
@@ -137,16 +159,26 @@ public class MovingCharacter : MonoBehaviour
             jumpDirection = Vector3.up;
         else if (OnSteep && PlayerStats.walljump)
         {
+
+            //if (collidedWallsList.Count > 0 && collidedWallsList[collidedWallsList.Count - 1] == currentWall)
+            //    return;
+
             //jumpDirection = steepNormal;
-            //jumpDirection = (steepNormal * 2 + Vector3.up).normalized;
+            jumpDirection = (steepNormal + Vector3.up).normalized;
+
+            wallJumpTimer = wallJumpCooldown;
 
             //velocity = Vector3.zero;
-            body.AddForce((steepNormal + Vector3.up) * jumpHeight * 40, ForceMode.Impulse);
+            //body.AddForce((steepNormal + Vector3.up) * jumpHeight * 40, ForceMode.Impulse);
 
-            Mathf.Clamp(velocity.y,velocity.y, Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight));
+            //Mathf.Clamp(velocity.y, velocity.y, Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight));
+
+            if (velocity.y < 0)
+                velocity.y = 0f;
+
             jumpPhase = 0;
 
-            return;
+            //return;
         }
         else if (maxAirJumps > 0 && jumpPhase <= maxAirJumps)
         {
@@ -156,21 +188,19 @@ public class MovingCharacter : MonoBehaviour
             if (velocity.y < 0)
                 velocity.y = 0;
 
-
             //jumpDirection = contactNormal;
             jumpDirection = Vector3.up;
         }
         else
             return;
 
-
         stepsSinceLastJump = 0;
         jumpPhase += 1;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
         //jumpDirection = (jumpDirection + Vector3.up).normalized;
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
-        //if (alignedSpeed > 0f)
-        //    jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
+        if (alignedSpeed > 0f)
+            jumpSpeed = Mathf.Max(jumpSpeed - alignedSpeed, 0f);
         velocity += jumpDirection * jumpSpeed;
     }
     void AudioJump()
@@ -183,11 +213,26 @@ public class MovingCharacter : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
+
+        //Vector3 normal = collision.GetContact(0).normal;
+        //if (normal.y > -0.01f)
+        //    currentWall = new CollidedWall(collision.collider, wallJumpCooldown, this);
+
     }
+    //void OnCollisionExit(Collision collision)
+    //{
+    //    float minDot = GetMinDot(collision.gameObject.layer);
+    //    //Debug.Log(collidedWallsList.Count);
+
+    //        if (!collidedWallsList.Contains(currentWall))
+    //        collidedWallsList.Add(currentWall);
+
+    //}
     void OnCollisionStay(Collision collision)
     {
         EvaluateCollision(collision);
     }
+
     /* 
      * To make it so that you cant wall jump unless the powerup is aquired we need to check what angle all the collision the character currently has are.
      * EvaluateCollision takes in all collision the character has had this frame and checks their normal with the ground and steep angles before saving them in their respective variable
@@ -222,10 +267,11 @@ public class MovingCharacter : MonoBehaviour
 
         float currentX = Vector3.Dot(velocity, xAxis);
         float currentZ = Vector3.Dot(velocity, zAxis);
-        
+
         float accelertaion = OnGround ? maxAcceleration : 1;
-        if (!OnGround && (desiredVelocity).x != 0 && (desiredVelocity).z != 0)
+        if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0)
             accelertaion = maxAirAccelertaion;
+
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
         //if (grappling)
@@ -315,5 +361,27 @@ public class MovingCharacter : MonoBehaviour
         }
         else
             audioStep.Stop();
+    }
+
+    public class CollidedWall
+    {
+        Collider collider;
+        float deleteTimer;
+        MovingCharacter movingCharacter;
+
+        public CollidedWall(Collider collider, float deleteTimer, MovingCharacter movingCharacter)
+        {
+            this.collider = collider;
+            this.deleteTimer = deleteTimer;
+            this.movingCharacter = movingCharacter;
+        }
+
+        public void RemoveFromList()
+        {
+            deleteTimer -= Time.deltaTime;
+
+            if (deleteTimer <= 0f)
+                movingCharacter.collidedWallsList.Remove(this);
+        }
     }
 }
