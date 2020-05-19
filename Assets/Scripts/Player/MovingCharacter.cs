@@ -143,6 +143,7 @@ public class MovingCharacter : MonoBehaviour
             //velocity = Vector3.zero;
             body.AddForce((steepNormal + Vector3.up) * jumpHeight * 40, ForceMode.Impulse);
 
+            Mathf.Clamp(velocity.y,velocity.y, Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight));
             jumpPhase = 0;
 
             return;
@@ -215,8 +216,6 @@ public class MovingCharacter : MonoBehaviour
      */
     void AdjustVelocity()
     {
-        if (!OnGround)
-            return;
 
         Vector3 xAxis = ProjectOnContactPlane(transform.right).normalized;
         Vector3 zAxis = ProjectOnContactPlane(transform.forward).normalized;
@@ -224,7 +223,9 @@ public class MovingCharacter : MonoBehaviour
         float currentX = Vector3.Dot(velocity, xAxis);
         float currentZ = Vector3.Dot(velocity, zAxis);
         
-        float accelertaion = OnGround ? maxAcceleration : maxAirAccelertaion;
+        float accelertaion = OnGround ? maxAcceleration : 1;
+        if (!OnGround && (desiredVelocity).x != 0 && (desiredVelocity).z != 0)
+            accelertaion = maxAirAccelertaion;
         float maxSpeedChange = accelertaion * Time.deltaTime;
 
         //if (grappling)
