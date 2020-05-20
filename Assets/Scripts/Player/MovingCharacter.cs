@@ -6,9 +6,6 @@ using UnityEngine;
 public class MovingCharacter : MonoBehaviour
 {
     [HideInInspector]
-    public List<CollidedWall> collidedWallsList;
-
-    [HideInInspector]
     public bool grappling;
 
     [SerializeField]
@@ -43,19 +40,17 @@ public class MovingCharacter : MonoBehaviour
     float wallJumpCooldown = 1f;
 
     [SerializeField, Range(0f, 100f)]
-    float dashForce = 50f;
+    float dashForce = 30f;
 
     [SerializeField, Min(0f)]
-    float dashDuration = 1f;
+    float dashDuration = 0.2f;
 
     [SerializeField, Range(0f, 3f)]
-    float dashCooldown = 1.5f;
+    float dashCooldown = 1f;
 
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
     Vector3 velocity, desiredVelocity, contactNormal, steepNormal;
-
-    CollidedWall currentWall;
 
     Rigidbody body;
 
@@ -90,7 +85,6 @@ public class MovingCharacter : MonoBehaviour
         OnValidate();
         speed = maxSpeed;
         maxSprintSpeed = maxSpeed * 2f;
-        collidedWallsList = new List<CollidedWall>();
         wallJumpTimer = 0f;
     }
     void Update()
@@ -101,17 +95,17 @@ public class MovingCharacter : MonoBehaviour
         //}
 
         Vector2 playerInput;
-        playerInput.x = Input.GetAxis("Horizontal");
-        playerInput.y = Input.GetAxis("Vertical");
+        playerInput.x = Input.GetAxisRaw("Horizontal");
+        playerInput.y = Input.GetAxisRaw("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
         sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
-        speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.deltaTime);
+        speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.unscaledDeltaTime);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         if (wallJumpTimer >= 0)
-            wallJumpTimer -= Time.deltaTime;
+            wallJumpTimer -= Time.unscaledDeltaTime;
 
         if (dashCooldown >= 0)
-            dashTimer -= Time.deltaTime;
+            dashTimer -= Time.unscaledDeltaTime;
 
         StepAudio();
         AudioJump();
@@ -141,7 +135,27 @@ public class MovingCharacter : MonoBehaviour
             Dash();
         }
 
+        //if (Time.timeScale < 1)
+        //{
+        //    velocity.x *= 1 / Time.timeScale;
+        //    //body.useGravity = false;
+        //    //velocity.y *= 1 / Time.timeScale;
+        //    Debug.Log(velocity);
+        //    //if (!OnGround)              
+        //    //    velocity.y += Physics.gravity.y/ 5;
+        //    velocity.z *= 1 / Time.timeScale;
+
+        //    //Debug.Log(velocity);
+        //    //Debug.Log(Physics.gravity.y);
+        //}
+
+        //if (Time.timeScale == 1)
+        //    body.useGravity = true;
+
         body.velocity = velocity;
+        //if (Time.timeScale < 1)
+        // body.velocity = Vector3.Scale(body.velocity, new Vector3(1 / Time.timeScale, 1 / Time.timeScale, 1 / Time.timeScale));
+
         ClearState();
     }
 
@@ -157,6 +171,7 @@ public class MovingCharacter : MonoBehaviour
         stepsSinceLastGrounded += 1;
         stepsSinceLastJump += 1;
         velocity = body.velocity;
+        //Debug.Log(velocity.y);
         if (OnGround || SnapToGround() || CheckSteepContacts())
         {
             stepsSinceLastGrounded = 0;
@@ -317,10 +332,15 @@ public class MovingCharacter : MonoBehaviour
         if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0 && !dashing)
             accelertaion = maxAirAccelertaion;
 
-        float maxSpeedChange = accelertaion * Time.deltaTime;
+        float maxSpeedChange = accelertaion;
 
         //if (grappling)
         //{
+
+
+        //*Time.deltaTime
+        //                         * speed
+        //                         * 1 / Time.timeScale;
 
         //    desiredVelocity.x += currentX;
         //    desiredVelocity.z += currentZ;
@@ -330,6 +350,8 @@ public class MovingCharacter : MonoBehaviour
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
         velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
+        //Debug.Log(Time.timeScale);
+        //Debug.Log("Time Mulitplier: " + (1 / Time.timeScale));
     }
 
     /*
@@ -403,27 +425,5 @@ public class MovingCharacter : MonoBehaviour
         }
         else
             audioStep.Stop();
-    }
-
-    public class CollidedWall
-    {
-        Collider collider;
-        float deleteTimer;
-        MovingCharacter movingCharacter;
-
-        public CollidedWall(Collider collider, float deleteTimer, MovingCharacter movingCharacter)
-        {
-            this.collider = collider;
-            this.deleteTimer = deleteTimer;
-            this.movingCharacter = movingCharacter;
-        }
-
-        public void RemoveFromList()
-        {
-            deleteTimer -= Time.deltaTime;
-
-            if (deleteTimer <= 0f)
-                movingCharacter.collidedWallsList.Remove(this);
-        }
     }
 }
