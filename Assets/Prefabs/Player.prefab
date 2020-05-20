@@ -419,6 +419,7 @@ MonoBehaviour:
   stairsMask:
     serializedVersion: 2
     m_Bits: 8192
+  wallJumpCooldown: 1
 --- !u!114 &8665726136694560977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -805,7 +806,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8665726137766236985}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c5cc946d8dcda84fb1d56503240783f, type: 3}
   m_Name: 

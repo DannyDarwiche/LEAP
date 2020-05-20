@@ -42,6 +42,15 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField]
     float wallJumpCooldown = 1f;
 
+    [SerializeField, Range(0f, 100f)]
+    float dashForce = 50f;
+
+    [SerializeField, Min(0f)]
+    float dashDuration = 1f;
+
+    [SerializeField, Range(0f, 3f)]
+    float dashCooldown = 1.5f;
+
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
     Vector3 velocity, desiredVelocity, contactNormal, steepNormal;
@@ -51,10 +60,14 @@ public class MovingCharacter : MonoBehaviour
     Rigidbody body;
 
     bool desiredJump;
+    bool desiredDash;
     bool sprint;
+    bool dashing;
+    bool doneDashing;
     float speed;
     float maxSprintSpeed;
     float wallJumpTimer;
+    float dashTimer;
 
     int jumpPhase, groundContactCount, steepContactCount;
 
@@ -97,11 +110,16 @@ public class MovingCharacter : MonoBehaviour
         if (wallJumpTimer >= 0)
             wallJumpTimer -= Time.deltaTime;
 
+        if (dashCooldown >= 0)
+            dashTimer -= Time.deltaTime;
+
         StepAudio();
         AudioJump();
 
+        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && dashTimer <= 0;
+
         //With Update and FixedUpdate not always being in sync |= will guarantee that the input is never lost
-        desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump;
+        desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump && !desiredDash && !dashing;
     }
     /*
      * FixedUpdate should be responsible for alll physics calculations and changes for the script
@@ -116,6 +134,13 @@ public class MovingCharacter : MonoBehaviour
             desiredJump = false;
             Jump();
         }
+
+        if (desiredDash)
+        {
+            desiredDash = false;
+            Dash();
+        }
+
         body.velocity = velocity;
         ClearState();
     }
@@ -155,8 +180,13 @@ public class MovingCharacter : MonoBehaviour
     {
         Vector3 jumpDirection;
         if (OnGround)
+        {
             //jumpDirection = contactNormal;
             jumpDirection = Vector3.up;
+
+            //Change - correction because removes air jump on wall jump below
+            jumpPhase += 1;
+        }
         else if (OnSteep && PlayerStats.walljump)
         {
 
@@ -176,7 +206,8 @@ public class MovingCharacter : MonoBehaviour
             if (velocity.y < 0)
                 velocity.y = 0f;
 
-            jumpPhase = 0;
+            //Change - OP
+            //jumpPhase = 0;
 
             //return;
         }
@@ -188,6 +219,9 @@ public class MovingCharacter : MonoBehaviour
             if (velocity.y < 0)
                 velocity.y = 0;
 
+            //Change - correction because removes air jump on wall jump below
+            jumpPhase += 1;
+
             //jumpDirection = contactNormal;
             jumpDirection = Vector3.up;
         }
@@ -195,7 +229,8 @@ public class MovingCharacter : MonoBehaviour
             return;
 
         stepsSinceLastJump = 0;
-        jumpPhase += 1;
+        //Change - Removes air jump when wall jumping
+        //jumpPhase += 1;
         float jumpSpeed = Mathf.Sqrt(-2f * Physics.gravity.y * jumpHeight);
         //jumpDirection = (jumpDirection + Vector3.up).normalized;
         float alignedSpeed = Vector3.Dot(velocity, jumpDirection);
@@ -210,6 +245,25 @@ public class MovingCharacter : MonoBehaviour
             audioJump.Play();
         }
     }
+    void Dash()
+    {
+        StartCoroutine(Cast());
+    }
+
+    IEnumerator Cast()
+    {
+        dashTimer = dashCooldown;
+        body.useGravity = false;
+        velocity = Camera.main.transform.forward * dashForce;
+        dashing = true;
+
+        yield return new WaitForSeconds(dashDuration);
+
+        body.velocity = Vector3.zero;
+        dashing = false;
+        body.useGravity = true;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         EvaluateCollision(collision);
@@ -219,15 +273,6 @@ public class MovingCharacter : MonoBehaviour
         //    currentWall = new CollidedWall(collision.collider, wallJumpCooldown, this);
 
     }
-    //void OnCollisionExit(Collision collision)
-    //{
-    //    float minDot = GetMinDot(collision.gameObject.layer);
-    //    //Debug.Log(collidedWallsList.Count);
-
-    //        if (!collidedWallsList.Contains(currentWall))
-    //        collidedWallsList.Add(currentWall);
-
-    //}
     void OnCollisionStay(Collision collision)
     {
         EvaluateCollision(collision);
@@ -269,7 +314,7 @@ public class MovingCharacter : MonoBehaviour
         float currentZ = Vector3.Dot(velocity, zAxis);
 
         float accelertaion = OnGround ? maxAcceleration : 1;
-        if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0)
+        if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0 && !dashing)
             accelertaion = maxAirAccelertaion;
 
         float maxSpeedChange = accelertaion * Time.deltaTime;
@@ -300,28 +345,25 @@ public class MovingCharacter : MonoBehaviour
      */
     bool SnapToGround()
     {
-        if (stepsSinceLastGrounded > 1 || stepsSinceLastJump <= 2)
-        {
+        if (stepsSinceLastGrounded > 1 || stepsSinceLastJump <= 2 || desiredDash || dashing)
             return false;
-        }
+
         float speed = velocity.magnitude;
         if (speed > maxSnapSpeed)
             return false;
+
         if (!Physics.Raycast(body.position, Vector3.down, out RaycastHit hit, probeDistance, probeMask))
-        {
             return false;
-        }
+
         if (hit.normal.y < GetMinDot(hit.collider.gameObject.layer))
-        {
             return false;
-        }
+
         groundContactCount = 1;
         contactNormal = hit.normal;
         float dot = Vector3.Dot(velocity, hit.normal);
         if (dot > 0f)
-        {
             velocity = (velocity - hit.normal * dot).normalized * speed;
-        }
+
         return true;
     }
     /*
