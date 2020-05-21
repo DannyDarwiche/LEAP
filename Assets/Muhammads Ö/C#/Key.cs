@@ -5,8 +5,8 @@ using UnityEngine;
 public class Key : MonoBehaviour
 {
     public GameObject Hole;
-    public GameObject Door;
-    public GameObject ActivatedDoor;
+    //public GameObject Door;
+    //public GameObject ActivatedDoor;
     [SerializeField]
     public int ID;
 
@@ -18,12 +18,5 @@ public class Key : MonoBehaviour
             //ActivatedDoor.SetActive(true);
             //Debug.Log("Collision");
         }
-    }
-
-    private void Awake()
-    {
-        
-
-
-    }
+    }   
 }

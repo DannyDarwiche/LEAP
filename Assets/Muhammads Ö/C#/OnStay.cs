@@ -11,13 +11,13 @@ public class OnStay : MonoBehaviour
     public int ID;
     bool isWaiting = false;
 
-    private void OnCollisionStay(Collision col)
+    private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject == Plate)
         {
             GameEvents.currentInstance.ButtonTriggerOn(ID);
-            //ActivatedDoor.SetActive(true);
-            //Debug.Log("Collision");
+            Destroy(Door);
         }
     }
+
 }

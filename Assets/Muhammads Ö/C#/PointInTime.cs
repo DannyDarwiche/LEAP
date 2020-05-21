@@ -8,11 +8,10 @@ public class PointInTime
     public Quaternion rotation;
     public Collision col;
 
-    public PointInTime (Vector3 _position, Quaternion _rotation, Collision _col)
+    public PointInTime (Vector3 _position, Quaternion _rotation)
     {
         position = _position;
         rotation = _rotation;
-        _col = col;
     }
 
 }
