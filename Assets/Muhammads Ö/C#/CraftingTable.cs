@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class CraftingTable : MonoBehaviour
 {
-    public GameObject White1;
-    public GameObject White2;
-    public GameObject White3;
-    public GameObject Blue1;
+    public GameObject White1, White2, White3, Blue1;
+    public bool White1isTrue, White2isTrue, White3isTrue;
+    List<GameObject> go = new List<GameObject>();
     [SerializeField]
     public int ID;
 
@@ -15,14 +14,34 @@ public class CraftingTable : MonoBehaviour
     {
         if (col.gameObject == White1)
         {
-            Destroy(White1);
-            Destroy(White2);
-            Destroy(White3);
-            Blue1.SetActive(true);
-            //GameEvents.currentInstance.ButtonTriggerOn(ID);
-            //ActivatedDoor.SetActive(true);
-            //Debug.Log("Collision");
+            White1isTrue = true;
+        }
+        else if (col.gameObject == White2)
+        {
+            White2isTrue = true;
+        }
+        else if (col.gameObject == White3)
+        {
+            White3isTrue = true;
+        }
+
+        else
+        {
+            White1isTrue = false;
+            White2isTrue = false;
+            White3isTrue = false;
+        }
+
+        if(White1isTrue && White2isTrue && White3isTrue)
+        {
+
+        Destroy(White1);
+        Destroy(White2);
+        Destroy(White3);
+        Blue1.SetActive(true);
 
         }
+
+
     }
 }
