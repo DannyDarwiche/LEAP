@@ -48,6 +48,9 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField, Range(0f, 3f)]
     float dashCooldown = 1f;
 
+    [SerializeField]
+    GraplingGun graplingGun;
+
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
     Vector3 velocity, desiredVelocity, contactNormal, steepNormal;
@@ -163,7 +166,6 @@ public class MovingCharacter : MonoBehaviour
     {
         groundContactCount = steepContactCount = 0;
         contactNormal = steepNormal = Vector3.zero;
-
     }
 
     void UpdateState()
@@ -171,7 +173,6 @@ public class MovingCharacter : MonoBehaviour
         stepsSinceLastGrounded += 1;
         stepsSinceLastJump += 1;
         velocity = body.velocity;
-        //Debug.Log(velocity.y);
         if (OnGround || SnapToGround() || CheckSteepContacts())
         {
             stepsSinceLastGrounded = 0;
@@ -332,27 +333,26 @@ public class MovingCharacter : MonoBehaviour
         if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0 && !dashing)
             accelertaion = maxAirAccelertaion;
 
-        float maxSpeedChange = accelertaion;
+        float maxSpeedChange = accelertaion * Time.fixedDeltaTime;
 
         //if (grappling)
         //{
-
-
-        //*Time.deltaTime
-        //                         * speed
-        //                         * 1 / Time.timeScale;
-
-        //    desiredVelocity.x += currentX;
-        //    desiredVelocity.z += currentZ;
+        //    desiredVelocity.x += currentX * 0.95f;
+        //    desiredVelocity.z += currentZ * 0.95f;
         //}
+
+        desiredVelocity += graplingGun.GetGrappleVelocity();
 
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
         velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
-        //Debug.Log(Time.timeScale);
-        //Debug.Log("Time Mulitplier: " + (1 / Time.timeScale));
     }
+
+    //public void AddGrappleVelocity(Vector3 grappleVelocity)
+    //{
+    //    velocity += grappleVelocity;
+    //}
 
     /*
      * ProjectOnContactPlane gets the movement vector on the ground by projecting in on the contact normal

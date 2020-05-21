@@ -1,116 +1,170 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class GraplingGun : MonoBehaviour
 {
-    private LineRenderer lr;
-    private Vector3 grapplePoint;
-    public LayerMask whatIsGrappleable;
-    public Transform gunTip, camera, player;
-    MovingCharacter movingCharacter;
-    private float maxDistance = 1000f;
-    private SpringJoint joint;
-    bool pullingGrapple;
+    [SerializeField]
+    MovingCharacter player;
+    [SerializeField]
+    Transform firePoint;
+    [SerializeField]
+    Transform gun;
+    [SerializeField]
+    int whatToGrapple;
+    [SerializeField]
+    float maxDistance, minDistance;
+    [SerializeField]
+    float rotationSmooth;
 
-    void Awake()
-    {
-        lr = GetComponent<LineRenderer>();
-        movingCharacter = player.GetComponent<MovingCharacter>();
-    }
+    [SerializeField]
+    float raycastRadius;
+    [SerializeField]
+    int raycastCount;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-            pullingGrapple = !pullingGrapple;
+    [SerializeField]
+    float pullForce;
+    [SerializeField]
+    float pushForce;
+    [SerializeField]
+    float yMultiplier;
+    [SerializeField]
+    float minPhysicsDistance;
+    [SerializeField]
+    float maxPhysicsDistance;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartGrapple();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            StopGrapple();
-        }
-    }
 
-    //Called after Update
+    [SerializeField]
+    LineRenderer lineRenderer;
+
+    Vector3 currentGrapplePosition;
+
+    Vector3 hit;
+
+    Vector3 velocity;
+
     void LateUpdate()
     {
-        DrawRope();
+        if (Input.GetMouseButtonDown(0) && Raycast(out RaycastHit hit))
+        {
+            this.hit = hit.point;
+
+            lineRenderer.positionCount = 2;
+            currentGrapplePosition = firePoint.position;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            lineRenderer.positionCount = 0;
+        }
+
+        //if (Input.GetMouseButtonDown(0))
+        //{
+
+        //}
     }
 
-    /// <summary>
-    /// Call whenever we want to start a grapple
-    /// </summary>
-    void StartGrapple()
+    void FixedUpdate()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(camera.position, camera.forward, out hit, maxDistance, whatIsGrappleable))
+        if (Input.GetMouseButton(0))
         {
-            movingCharacter.grappling = true;
-            grapplePoint = hit.point;
-            joint = player.gameObject.AddComponent<SpringJoint>();
-            joint.autoConfigureConnectedAnchor = false;
-            joint.connectedAnchor = grapplePoint;
+            gun.rotation = Quaternion.Lerp(gun.rotation, Quaternion.LookRotation(-(gun.position - hit)), rotationSmooth * Time.fixedDeltaTime);
 
-            float distanceFromPoint = Vector3.Distance(player.position, grapplePoint);
+            float distance = Vector3.Distance(player.transform.position, hit);
+            if (!(distance >= minPhysicsDistance) || !(distance <= maxPhysicsDistance))
+                return;
 
-            //The distance grapple will try to keep from grapple point. 
-            joint.maxDistance = distanceFromPoint * 0.8f;
-            joint.minDistance = distanceFromPoint * 0.1f;
-
-            if (!pullingGrapple)
-            {
-                Debug.Log("Normal");
-                //Adjust these values to fit your game.
-                joint.spring = 900f;
-                joint.damper = 1400f;
-                joint.massScale = 20f;
-            }
-            else
-            {
-                Debug.Log("Pulling");
-                //Adjust these values to fit your game.
-                joint.spring = 2000f;
-                joint.damper = 800f;
-                joint.massScale = 20f;
-            }
-
-            lr.positionCount = 2;
-            currentGrapplePosition = gunTip.position;
+            velocity += pullForce * Time.fixedDeltaTime * yMultiplier * Mathf.Abs(hit.y - player.transform.position.y) * (hit - player.transform.position).normalized;
+            velocity += pushForce * Time.fixedDeltaTime * player.transform.forward;
+        }
+        else
+        {
+            gun.localRotation = Quaternion.Lerp(gun.localRotation, Quaternion.Euler(0, 0, 0), rotationSmooth * Time.fixedDeltaTime);
+            velocity = Vector3.zero;
         }
     }
-
-
-    /// <summary>
-    /// Call whenever we want to stop a grapple
-    /// </summary>
-    void StopGrapple()
-    {
-        movingCharacter.grappling = false;
-        lr.positionCount = 0;
-        Destroy(joint);
-    }
-
-    private Vector3 currentGrapplePosition;
 
     void DrawRope()
     {
-        //If not grappling, don't draw rope
-        if (!joint) return;
+        if (!Input.GetMouseButton(0))
+        {
+            return;
+        }
 
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
+        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, hit, Time.deltaTime * 8f);
 
-        lr.SetPosition(0, gunTip.position);
-        lr.SetPosition(1, currentGrapplePosition);
+        lineRenderer.SetPosition(0, firePoint.position);
+        lineRenderer.SetPosition(1, currentGrapplePosition);
     }
 
-    public bool IsGrappling()
+    public Vector3 GetGrappleVelocity()
     {
-        return joint != null;
+        return velocity;
     }
 
-    public Vector3 GetGrapplePoint()
+    bool Raycast(out RaycastHit hit)
     {
-        return grapplePoint;
+        float diveded = raycastRadius / 2f;
+        List<RaycastHit> possible = new List<RaycastHit>();
+        Transform cam = Camera.main.transform;
+
+        for (int x = 0; x < raycastCount; x++)
+        {
+            for (int y = 0; y < raycastCount; y++)
+            {
+                Vector2 pos = new Vector2(
+                    Mathf.Lerp(-diveded, diveded, x / (float)(raycastCount - 1)),
+                    Mathf.Lerp(-diveded, diveded, y / (float)(raycastCount - 1)));
+
+                if (!Physics.Raycast(cam.position + cam.right * pos.x + cam.up * pos.y, cam.forward, out hit, maxDistance))
+                    continue;
+
+                float distance = Vector3.Distance(cam.position, hit.point);
+                //if (hit.transform.gameObject.layer != whatToGrapple)
+                //    continue;
+                if (distance < minDistance)
+                    continue;
+                if (distance > maxDistance)
+                    continue;
+                possible.Add(hit);
+            }
+        }
+
+        RaycastHit[] arr = possible.ToArray();
+        possible.Clear();
+
+        if (arr.Length > 0)
+        {
+            RaycastHit closest = new RaycastHit();
+            float distance = 0f;
+            bool set = false;
+
+            foreach (RaycastHit h in arr)
+            {
+                float hitDistance = DistanceFromCenter(h.point);
+
+                if (!set)
+                {
+                    set = true;
+                    distance = hitDistance;
+                    closest = h;
+                }
+                else if (hitDistance < distance)
+                {
+                    distance = hitDistance; ;
+                    closest = h;
+                }
+            }
+            hit = closest;
+            return true;
+
+        }
+
+        hit = new RaycastHit();
+        return false;
+    }
+
+    float DistanceFromCenter(Vector3 point)
+    {
+        return Vector2.Distance(Camera.main.WorldToViewportPoint(point), new Vector2(0.5f, 0.5f));
     }
 }
