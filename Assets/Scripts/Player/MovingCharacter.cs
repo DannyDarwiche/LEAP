@@ -67,7 +67,7 @@ public class MovingCharacter : MonoBehaviour
     float wallJumpTimer;
     float dashTimer;
 
-    int jumpPhase, groundContactCount, steepContactCount;
+    int jumpPhase, dashPhase, groundContactCount, steepContactCount;
 
     //minGroundDotProduct describes the maximum angle you can climb on a plain surface
     //minStairsDotProduct describes the maximum angle you can climb on stairs
@@ -76,6 +76,7 @@ public class MovingCharacter : MonoBehaviour
     int stepsSinceLastGrounded, stepsSinceLastJump;
 
     bool OnGround => groundContactCount > 0;
+    bool DashGroundReset => OnGround;
     bool OnSteep => steepContactCount > 0;
     void OnValidate()
     {
@@ -89,6 +90,7 @@ public class MovingCharacter : MonoBehaviour
         speed = maxSpeed;
         maxSprintSpeed = maxSpeed * 2f;
         wallJumpTimer = 0f;
+        dashPhase = 2;
     }
     void Update()
     {
@@ -107,13 +109,13 @@ public class MovingCharacter : MonoBehaviour
         if (wallJumpTimer >= 0)
             wallJumpTimer -= Time.unscaledDeltaTime;
 
-        if (dashCooldown >= 0)
-            dashTimer -= Time.unscaledDeltaTime;
+        //if (dashCooldown >= 0)
+        //    dashTimer -= Time.unscaledDeltaTime;
 
         StepAudio();
         AudioJump();
 
-        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && dashTimer <= 0;
+        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && !dashing && dashPhase > 0;
 
         //With Update and FixedUpdate not always being in sync |= will guarantee that the input is never lost
         desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump && !desiredDash && !dashing;
@@ -268,16 +270,31 @@ public class MovingCharacter : MonoBehaviour
 
     IEnumerator Cast()
     {
-        dashTimer = dashCooldown;
+        dashPhase--;
+        //dashTimer = dashCooldown;
         body.useGravity = false;
         velocity = Camera.main.transform.forward * dashForce;
         dashing = true;
+
+        StartCoroutine(DashCooldown());
 
         yield return new WaitForSeconds(dashDuration);
 
         body.velocity = Vector3.zero;
         dashing = false;
         body.useGravity = true;
+    }
+
+    IEnumerator DashCooldown()
+    {
+        yield return new WaitForSeconds(dashCooldown);
+
+        yield return new WaitUntil(() => DashGroundReset);
+    
+        //while (!OnGround)
+        //    yield return new WaitForSeconds(0.1f);
+
+        dashPhase++;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -333,15 +350,22 @@ public class MovingCharacter : MonoBehaviour
         if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0 && !dashing)
             accelertaion = maxAirAccelertaion;
 
+        if (grappling)
+        {
+            accelertaion = 5;
+        }
+
         float maxSpeedChange = accelertaion * Time.fixedDeltaTime;
 
-        //if (grappling)
-        //{
-        //    desiredVelocity.x += currentX * 0.95f;
-        //    desiredVelocity.z += currentZ * 0.95f;
-        //}
+        if (grappling)
+        {
+            desiredVelocity.x += currentX * 0.95f;
+            desiredVelocity.z += currentZ * 0.95f;
+        }
 
-        desiredVelocity += graplingGun.GetGrappleVelocity();
+        //velocity.y += graplingGun.GetGrappleVelocity().y * Time.fixedDeltaTime;
+        //desiredVelocity += graplingGun.GetGrappleVelocity();
+
 
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
