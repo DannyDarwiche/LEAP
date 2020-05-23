@@ -38,25 +38,29 @@ public class GraplingGun : MonoBehaviour
     float grappleCooldown = 2f;
 
     [SerializeField]
-    float grappleTimer;
+    float gunRotationSpeed = 5f;
 
+    Rigidbody playerRigidBody;
     SpringJoint joint;
-    Vector3 grapplePoint;
     LineRenderer lineRenderer;
-    bool pullingGrapple;
+    Quaternion desiredRotation;
+    Vector3 grapplePoint;
+    Vector3 currentGrapplePosition;
     float startSpring;
+    float grappleTimer;
+    bool pullingGrapple;
     bool grappling;
 
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        playerRigidBody = player.GetComponent<Rigidbody>();
         startSpring = spring;
     }
 
     void Update()
     {
-        Debug.Log(grappleTimer);
-        //Debug.Log(grappleCooldown);
+        RotateGun();
 
         if (grappleTimer >= 0f)
             grappleTimer -= Time.deltaTime;
@@ -108,6 +112,9 @@ public class GraplingGun : MonoBehaviour
             if (!pullingGrapple)
             {
                 Debug.Log("Normal");
+
+                //playerRigidBody.AddForce(Vector3.down * 100, ForceMode.Impulse);
+
                 //Adjust these values to fit your game.
                 joint.spring = spring;
                 joint.damper = damper;
@@ -139,8 +146,6 @@ public class GraplingGun : MonoBehaviour
         Destroy(joint);
     }
 
-    private Vector3 currentGrapplePosition;
-
     void DrawRope()
     {
         //If not grappling, don't draw rope
@@ -152,13 +157,23 @@ public class GraplingGun : MonoBehaviour
         lineRenderer.SetPosition(1, currentGrapplePosition);
     }
 
-    public bool IsGrappling()
+    void RotateGun()
     {
-        return joint != null;
+        if (!grappling)
+            desiredRotation = transform.parent.rotation;
+        else
+            desiredRotation = Quaternion.LookRotation(grapplePoint - transform.position);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, gunRotationSpeed * Time.deltaTime);
     }
 
-    public Vector3 GetGrapplePoint()
-    {
-        return grapplePoint;
-    }
+    //public bool IsGrappling()
+    //{
+    //    return joint != null;
+    //}
+
+    //public Vector3 GetGrapplePoint()
+    //{
+    //    return grapplePoint;
+    //}
 }
