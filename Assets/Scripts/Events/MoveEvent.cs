@@ -37,6 +37,8 @@ public class MoveEvent : MonoBehaviour
     {
         GameEvents.currentInstance.OnButtonTriggerOn += Activated;
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
+        GameEvents.currentInstance.OnPlatformTriggerOn += Activated;
+        GameEvents.currentInstance.OnPlatformTriggerOff += Deactivated;
         startPosition = transform.position;
         moveDirection.Normalize();
     }
@@ -56,5 +58,7 @@ public class MoveEvent : MonoBehaviour
     {
         GameEvents.currentInstance.OnButtonTriggerOn -= Activated;
         GameEvents.currentInstance.OnButtonTriggerOff -= Deactivated;
+        GameEvents.currentInstance.OnPlatformTriggerOn -= Activated;
+        GameEvents.currentInstance.OnPlatformTriggerOff -= Deactivated;
     }
 }

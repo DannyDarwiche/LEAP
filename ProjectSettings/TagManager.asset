@@ -9,6 +9,9 @@ TagManager:
   - Ground
   - Jump
   - Torch
+  - KeyGreen
+  - KeyBlue
+  - KeyRed
   layers:
   - Default
   - TransparentFX
