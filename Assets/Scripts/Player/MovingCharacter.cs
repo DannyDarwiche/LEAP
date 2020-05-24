@@ -41,6 +41,8 @@ public class MovingCharacter : MonoBehaviour
     float wallJumpCooldown = 1f;
 
     [Header("Dash")]
+    [SerializeField, Range(0f, 5f)]
+    int dashPhase = 1;
     [SerializeField, Range(0f, 100f)]
     float dashForce = 30f;
     [SerializeField, Min(0f)]
@@ -77,7 +79,7 @@ public class MovingCharacter : MonoBehaviour
 
     PlayerStats playerStats;
 
-    int jumpPhase, dashPhase, groundContactCount, steepContactCount;
+    int jumpPhase, groundContactCount, steepContactCount;
 
     //minGroundDotProduct describes the maximum angle you can climb on a plain surface
     //minStairsDotProduct describes the maximum angle you can climb on stairs
@@ -95,19 +97,54 @@ public class MovingCharacter : MonoBehaviour
         return playerStats.IsAbilityUnlocked(AbilityType.Dash);
     }
 
+    public bool CanSprint()
+    {
+        return playerStats.IsAbilityUnlocked(AbilityType.Sprint);
+    }
+
     public bool CanWallJump()
     {
         return playerStats.IsAbilityUnlocked(AbilityType.WallJump);
     }
 
-    public void SetMaxSpeed(float newMaxSpeed)
+    public void SetJumpHeight(float addedJumpHeight)
     {
-        maxSpeed = newMaxSpeed;
+        jumpHeight = jumpHeight + addedJumpHeight;
     }
 
-    public void SetJumpHeight(float newJumpHeight)
+    public void SetAirJump()
     {
-        jumpHeight = newJumpHeight;
+        maxAirJumps++;
+    }
+
+    public void SetMaxDashes()
+    {
+        dashPhase++;
+    }
+
+    public void SetDashCooldown()
+    {
+        dashCooldown = dashCooldown / 2;
+    }
+
+    public void SetDashForce()
+    {
+        dashForce += 30f;
+    }
+
+    public void SetPickUp()
+    {
+        GetComponentInChildren<PickUpManager>().enabled = true;
+    }
+
+    public void SetMaxSpeed(float addedSpeed)
+    {
+        maxSpeed = maxSpeed + addedSpeed;
+    }
+
+    public void SetCrouch()
+    {
+        GetComponent<Crouch>().enabled = true;
     }
 
     public PlayerStats GetPlayerStats()
@@ -119,18 +156,38 @@ public class MovingCharacter : MonoBehaviour
     {
         switch (e.abilityType)
         {
-            case AbilityType.IncreasedSpeed:
-                SetMaxSpeed(8f);
+            case AbilityType.JumpHeightUp1:
+            case AbilityType.JumpHeightUp2:
+                SetJumpHeight(1f);
                 break;
-            case AbilityType.IncreasedJumpHeight:
-                SetJumpHeight(3.5f);
+            case AbilityType.AirJumpUp1:
+            case AbilityType.AirJumpUp2:
+                SetAirJump();
                 break;
-
+            case AbilityType.AddedDash:
+                SetMaxDashes();
+                break;
+            case AbilityType.DashCooldown:
+                SetDashCooldown();
+                break;
+            case AbilityType.DashForceUp:
+                SetDashForce();
+                break;
+            case AbilityType.PickUp:
+                SetPickUp();
+                break;
+            case AbilityType.MoveSpeedUp1:
+            case AbilityType.MoveSpeedUp2:
+                SetMaxSpeed(2f);
+                break;
+            case AbilityType.Crouch:
+                SetCrouch();
+                break;
         }
     }
 
     bool OnGround => groundContactCount > 0;
-    bool DashGroundReset => OnGround;
+    bool DashGroundReset => OnGround; //Kan vi inte bara använda OnGround direkt?
     bool OnSteep => steepContactCount > 0;
     void OnValidate()
     {
@@ -145,7 +202,6 @@ public class MovingCharacter : MonoBehaviour
         speed = maxSpeed;
         maxSprintSpeed = maxSpeed * 2f;
         wallJumpTimer = 0f;
-        dashPhase = 2;
 
         cameraFov = Camera.main.GetComponent<CameraFov>();
         speedLines = GetComponentInChildren<ParticleSystem>();
@@ -164,7 +220,7 @@ public class MovingCharacter : MonoBehaviour
         playerInput.x = Input.GetAxisRaw("Horizontal");
         playerInput.y = Input.GetAxisRaw("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-        sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
+        sprint = Input.GetButton("Sprint") && CanSprint() && OnGround;
         speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.unscaledDeltaTime);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         if (wallJumpTimer >= 0)
@@ -176,7 +232,7 @@ public class MovingCharacter : MonoBehaviour
         StepAudio();
         AudioJump();
 
-        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && !dashing && dashPhase > 0;
+        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && CanDash() && !dashing && dashPhase > 0;
 
         //With Update and FixedUpdate not always being in sync |= will guarantee that the input is never lost
         desiredJump |= Input.GetButtonDown("Jump") && CanJump() /*PlayerStats.jump*/ && !desiredDash && !dashing;
@@ -357,7 +413,7 @@ public class MovingCharacter : MonoBehaviour
         yield return new WaitForSeconds(dashCooldown);
 
         yield return new WaitUntil(() => DashGroundReset);
-    
+
         //while (!OnGround)
         //    yield return new WaitForSeconds(0.1f);
 
