@@ -10,18 +10,18 @@ public class MovingCharacter : MonoBehaviour
 
     [SerializeField]
     AudioSource audioStep;
-
     [SerializeField]
     AudioSource audioJump;
 
+    [Header("Basic Movement")]
     [SerializeField, Range(0f, 100f)]
-    float maxSpeed = 10f;
+    float maxSpeed = 6f;
     [SerializeField, Range(0f, 100f)]
     float maxAcceleration = 10f, maxAirAccelertaion = 1f;
     [SerializeField, Range(0f, 10f)]
-    public float jumpHeight = PlayerStats.jumpHeight;
+    public float jumpHeight = 2.5f;
     [SerializeField, Range(0, 5)]
-    int maxAirJumps = PlayerStats.maxAirJumps;
+    int maxAirJumps = 2;
     [SerializeField, Range(0f, 90f)]
     float maxGroundAngle = 25f, maxStairsAngle = 50f;
     [SerializeField, Range(0f, 100f)]
@@ -36,17 +36,27 @@ public class MovingCharacter : MonoBehaviour
     [SerializeField]
     LayerMask probeMask = -1, stairsMask = -1;
 
+    [Header("Walljump")]
     [SerializeField]
     float wallJumpCooldown = 1f;
 
+    [Header("Dash")]
+    [SerializeField, Range(0f, 5f)]
+    int dashPhase = 1;
     [SerializeField, Range(0f, 100f)]
     float dashForce = 30f;
-
     [SerializeField, Min(0f)]
     float dashDuration = 0.2f;
-
     [SerializeField, Range(0f, 3f)]
     float dashCooldown = 1f;
+    [SerializeField]
+    float normalFov = 60f;
+    [SerializeField]
+    float dashFov = 100f;
+
+    [Header("Grappling Gun")]
+    [SerializeField]
+    GraplingGun graplingGun;
 
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
@@ -64,6 +74,11 @@ public class MovingCharacter : MonoBehaviour
     float wallJumpTimer;
     float dashTimer;
 
+    ParticleSystem speedLines;
+    CameraFov cameraFov;
+
+    PlayerStats playerStats;
+
     int jumpPhase, groundContactCount, steepContactCount;
 
     //minGroundDotProduct describes the maximum angle you can climb on a plain surface
@@ -72,7 +87,107 @@ public class MovingCharacter : MonoBehaviour
 
     int stepsSinceLastGrounded, stepsSinceLastJump;
 
+    public bool CanJump()
+    {
+        return playerStats.IsAbilityUnlocked(AbilityType.Jump);
+    }
+
+    public bool CanDash()
+    {
+        return playerStats.IsAbilityUnlocked(AbilityType.Dash);
+    }
+
+    public bool CanSprint()
+    {
+        return playerStats.IsAbilityUnlocked(AbilityType.Sprint);
+    }
+
+    public bool CanWallJump()
+    {
+        return playerStats.IsAbilityUnlocked(AbilityType.WallJump);
+    }
+
+    public void SetJumpHeight(float addedJumpHeight)
+    {
+        jumpHeight = jumpHeight + addedJumpHeight;
+    }
+
+    public void SetAirJump()
+    {
+        maxAirJumps++;
+    }
+
+    public void SetMaxDashes()
+    {
+        dashPhase++;
+    }
+
+    public void SetDashCooldown()
+    {
+        dashCooldown = dashCooldown / 2;
+    }
+
+    public void SetDashForce()
+    {
+        dashForce += 30f;
+    }
+
+    public void SetPickUp()
+    {
+        GetComponentInChildren<PickUpManager>().enabled = true;
+    }
+
+    public void SetMaxSpeed(float addedSpeed)
+    {
+        maxSpeed = maxSpeed + addedSpeed;
+    }
+
+    public void SetCrouch()
+    {
+        GetComponent<Crouch>().enabled = true;
+    }
+
+    public PlayerStats GetPlayerStats()
+    {
+        return playerStats;
+    }
+
+    void PlayerStatsOnAbilityUnlocked(object sender, PlayerStats.OnAbilityUnlockedEventArgs e)
+    {
+        switch (e.abilityType)
+        {
+            case AbilityType.JumpHeightUp1:
+            case AbilityType.JumpHeightUp2:
+                SetJumpHeight(1f);
+                break;
+            case AbilityType.AirJumpUp1:
+            case AbilityType.AirJumpUp2:
+                SetAirJump();
+                break;
+            case AbilityType.AddedDash:
+                SetMaxDashes();
+                break;
+            case AbilityType.DashCooldown:
+                SetDashCooldown();
+                break;
+            case AbilityType.DashForceUp:
+                SetDashForce();
+                break;
+            case AbilityType.PickUp:
+                SetPickUp();
+                break;
+            case AbilityType.MoveSpeedUp1:
+            case AbilityType.MoveSpeedUp2:
+                SetMaxSpeed(2f);
+                break;
+            case AbilityType.Crouch:
+                SetCrouch();
+                break;
+        }
+    }
+
     bool OnGround => groundContactCount > 0;
+    bool DashGroundReset => OnGround; //Kan vi inte bara använda OnGround direkt?
     bool OnSteep => steepContactCount > 0;
     void OnValidate()
     {
@@ -83,9 +198,16 @@ public class MovingCharacter : MonoBehaviour
     {
         body = GetComponent<Rigidbody>();
         OnValidate();
+
         speed = maxSpeed;
         maxSprintSpeed = maxSpeed * 2f;
         wallJumpTimer = 0f;
+
+        cameraFov = Camera.main.GetComponent<CameraFov>();
+        speedLines = GetComponentInChildren<ParticleSystem>();
+
+        playerStats = new PlayerStats();
+        playerStats.OnAbilityUnlocked += PlayerStatsOnAbilityUnlocked;
     }
     void Update()
     {
@@ -98,22 +220,22 @@ public class MovingCharacter : MonoBehaviour
         playerInput.x = Input.GetAxisRaw("Horizontal");
         playerInput.y = Input.GetAxisRaw("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-        sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
+        sprint = Input.GetButton("Sprint") && CanSprint() && OnGround;
         speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.unscaledDeltaTime);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         if (wallJumpTimer >= 0)
             wallJumpTimer -= Time.unscaledDeltaTime;
 
-        if (dashCooldown >= 0)
-            dashTimer -= Time.unscaledDeltaTime;
+        //if (dashCooldown >= 0)
+        //    dashTimer -= Time.unscaledDeltaTime;
 
         StepAudio();
         AudioJump();
 
-        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && dashTimer <= 0;
+        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && CanDash() && !dashing && dashPhase > 0;
 
         //With Update and FixedUpdate not always being in sync |= will guarantee that the input is never lost
-        desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump && !desiredDash && !dashing;
+        desiredJump |= Input.GetButtonDown("Jump") && CanJump() /*PlayerStats.jump*/ && !desiredDash && !dashing;
     }
     /*
      * FixedUpdate should be responsible for alll physics calculations and changes for the script
@@ -163,7 +285,6 @@ public class MovingCharacter : MonoBehaviour
     {
         groundContactCount = steepContactCount = 0;
         contactNormal = steepNormal = Vector3.zero;
-
     }
 
     void UpdateState()
@@ -171,7 +292,6 @@ public class MovingCharacter : MonoBehaviour
         stepsSinceLastGrounded += 1;
         stepsSinceLastJump += 1;
         velocity = body.velocity;
-        //Debug.Log(velocity.y);
         if (OnGround || SnapToGround() || CheckSteepContacts())
         {
             stepsSinceLastGrounded = 0;
@@ -202,7 +322,7 @@ public class MovingCharacter : MonoBehaviour
             //Change - correction because removes air jump on wall jump below
             jumpPhase += 1;
         }
-        else if (OnSteep && PlayerStats.walljump)
+        else if (OnSteep && CanWallJump())
         {
 
             //if (collidedWallsList.Count > 0 && collidedWallsList[collidedWallsList.Count - 1] == currentWall)
@@ -267,16 +387,37 @@ public class MovingCharacter : MonoBehaviour
 
     IEnumerator Cast()
     {
-        dashTimer = dashCooldown;
+        dashPhase--;
+        //dashTimer = dashCooldown;
         body.useGravity = false;
         velocity = Camera.main.transform.forward * dashForce;
         dashing = true;
+
+        cameraFov.SetCameraFov(dashFov);
+        speedLines.Play();
+
+        StartCoroutine(DashCooldown());
 
         yield return new WaitForSeconds(dashDuration);
 
         body.velocity = Vector3.zero;
         dashing = false;
         body.useGravity = true;
+
+        cameraFov.SetCameraFov(normalFov);
+        speedLines.Stop();
+    }
+
+    IEnumerator DashCooldown()
+    {
+        yield return new WaitForSeconds(dashCooldown);
+
+        yield return new WaitUntil(() => DashGroundReset);
+
+        //while (!OnGround)
+        //    yield return new WaitForSeconds(0.1f);
+
+        dashPhase++;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -332,27 +473,33 @@ public class MovingCharacter : MonoBehaviour
         if (!OnGround && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) && wallJumpTimer <= 0 && !dashing)
             accelertaion = maxAirAccelertaion;
 
-        float maxSpeedChange = accelertaion;
+        if (grappling)
+        {
+            accelertaion = 5;
+        }
 
-        //if (grappling)
-        //{
+        float maxSpeedChange = accelertaion * Time.fixedDeltaTime;
 
+        if (grappling)
+        {
+            desiredVelocity.x += currentX * 0.95f;
+            desiredVelocity.z += currentZ * 0.95f;
+        }
 
-        //*Time.deltaTime
-        //                         * speed
-        //                         * 1 / Time.timeScale;
+        //velocity.y += graplingGun.GetGrappleVelocity().y * Time.fixedDeltaTime;
+        //desiredVelocity += graplingGun.GetGrappleVelocity();
 
-        //    desiredVelocity.x += currentX;
-        //    desiredVelocity.z += currentZ;
-        //}
 
         float newX = Mathf.MoveTowards(currentX, desiredVelocity.x, maxSpeedChange);
         float newZ = Mathf.MoveTowards(currentZ, desiredVelocity.z, maxSpeedChange);
 
         velocity += xAxis * (newX - currentX) + zAxis * (newZ - currentZ);
-        //Debug.Log(Time.timeScale);
-        //Debug.Log("Time Mulitplier: " + (1 / Time.timeScale));
     }
+
+    //public void AddGrappleVelocity(Vector3 grappleVelocity)
+    //{
+    //    velocity += grappleVelocity;
+    //}
 
     /*
      * ProjectOnContactPlane gets the movement vector on the ground by projecting in on the contact normal

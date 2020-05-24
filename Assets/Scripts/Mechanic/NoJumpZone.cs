@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class NoJumpZone : MonoBehaviour
 {
+    float savedValue;
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-            PlayerStats.jump = false;
+        {
+            savedValue = other.transform.GetComponent<MovingCharacter>().jumpHeight;
+            other.transform.GetComponent<MovingCharacter>().jumpHeight = 0f;
+        }
     }
     void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-            PlayerStats.jump = true;
+            other.transform.GetComponent<MovingCharacter>().jumpHeight = savedValue;
     }
 }
