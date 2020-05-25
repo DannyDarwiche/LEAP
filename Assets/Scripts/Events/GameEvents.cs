@@ -68,4 +68,19 @@ public class GameEvents : MonoBehaviour
         if (OnPuzzleFailedTrigger != null)
             OnPuzzleFailedTrigger(id);
     }
+
+
+    public event Action<int> OnPlatformTriggerOn; 
+    public void PlatformTriggerOn(int id)
+    {
+        if (OnPlatformTriggerOn != null)
+            OnPlatformTriggerOn(id); 
+    }
+
+    public event Action<int> OnPlatformTriggerOff; 
+    public void PlatformTriggerOff(int id)
+    {
+        if (OnPlatformTriggerOff != null)
+            OnPlatformTriggerOff(id); 
+    }
 }

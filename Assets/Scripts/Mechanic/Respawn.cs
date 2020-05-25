@@ -19,10 +19,13 @@ public class Respawn : MonoBehaviour
     void Update()
     {
         if (transform.position.y < respawnTriggerHeight)
-        {
-            playerRigidbody.velocity = Vector3.zero;
-            playerRigidbody.angularVelocity = Vector3.zero;
-            transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
-        }
+            TriggerRespawn();
+    }
+
+    public void TriggerRespawn()
+    {
+        playerRigidbody.velocity = Vector3.zero;
+        playerRigidbody.angularVelocity = Vector3.zero;
+        transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
     }
 }
