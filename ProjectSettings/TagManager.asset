@@ -9,6 +9,7 @@ TagManager:
   - Ground
   - Jump
   - Torch
+  - UpgradeButton
   layers:
   - Default
   - TransparentFX

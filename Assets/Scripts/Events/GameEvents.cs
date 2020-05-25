@@ -9,29 +9,43 @@ public class GameEvents : MonoBehaviour
 
     void Awake()
     {
-        if(currentInstance == null)
-            currentInstance = this; 
+        if (currentInstance == null)
+            currentInstance = this;
     }
 
-    public event Action<int> OnButtonTriggerOn; 
+    public event Action OnTokenGet;
+    public void TokenGet()
+    {
+        if (OnTokenGet != null)
+            OnTokenGet();
+    }
+
+    public event Action<AbilityType> OnUpgradeGet;
+    public void UpgradeGet(AbilityType abilityType)
+    {
+        if (OnUpgradeGet != null)
+            OnUpgradeGet(abilityType);
+    }
+
+    public event Action<int> OnButtonTriggerOn;
     public void ButtonTriggerOn(int id)
     {
         if (OnButtonTriggerOn != null)
-                OnButtonTriggerOn(id); 
+            OnButtonTriggerOn(id);
     }
 
     public event Action<int> OnButtonTriggerOff;
     public void ButtonTriggerOff(int id)
     {
         if (OnButtonTriggerOff != null)
-                OnButtonTriggerOff(id);
+            OnButtonTriggerOff(id);
     }
 
     public event Action<int, float> OnPreasureplateTriggerOn;
     public void PreasureplateTriggerOn(int id, float percentage)
     {
         if (OnPreasureplateTriggerOn != null)
-            OnPreasureplateTriggerOn(id,percentage);
+            OnPreasureplateTriggerOn(id, percentage);
     }
 
     public event Action<int, float> OnPreasureplateTriggerOff;
