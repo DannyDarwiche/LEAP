@@ -30,7 +30,7 @@ public class PickUpManager : MonoBehaviour
     private void Update()
     {
         if (player.throwPickable)
-            player.throwPickable = false; 
+            player.throwPickable = false;
 
         if ((Input.GetMouseButtonDown(0) && isHolding))
             DropItem();
@@ -104,7 +104,7 @@ public class PickUpManager : MonoBehaviour
         if (thrown)
         {
             heldItemRigidbody.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
-            player.throwPickable = true; 
+            //player.throwPickable = true; 
         }    
         itemDropScript.enabled = false;
         itemDropScript.dropitem = false;
