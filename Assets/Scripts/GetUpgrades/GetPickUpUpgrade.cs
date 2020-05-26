@@ -15,7 +15,7 @@ public class GetPickUpUpgrade : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponentInChildren<PickUpManager>().enabled = true;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }

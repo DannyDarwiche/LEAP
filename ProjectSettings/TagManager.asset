@@ -12,6 +12,7 @@ TagManager:
   - KeyGreen
   - KeyBlue
   - KeyRed
+  - UpgradeButton
   layers:
   - Default
   - TransparentFX

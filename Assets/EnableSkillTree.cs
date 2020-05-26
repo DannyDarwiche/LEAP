@@ -13,17 +13,36 @@ public class EnableSkillTree : MonoBehaviour
     [SerializeField]
     GameObject hoverPanel;
 
+    [SerializeField]
+    Animator animatorSkillTree;
+
+    [SerializeField]
+    Animator animatorTokenCount;
+
+    bool activeState = false;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Tab) && animatorSkillTree.GetCurrentAnimatorStateInfo(0).normalizedTime >= animatorSkillTree.GetCurrentAnimatorStateInfo(0).length)
         {
-            skillTree.SetActive(!skillTree.activeSelf);
-            tokenImage.SetActive(!tokenImage.activeSelf);
+            Debug.Log("Got in");
+            activeState = !activeState;
+            //skillTree.SetActive(true);
+            //tokenImage.SetActive(!tokenImage.activeSelf);
             hoverPanel.SetActive(false);
-            if (skillTree.activeSelf == true)
+
+            if (activeState)
+            {
+                animatorSkillTree.SetBool("Rewind", true);
+                //animatorTokenCount.SetBool("Rewind", true);
                 Cursor.lockState = CursorLockMode.None; //Confined is recommended for the build but doesn't work in the Editor.
+            }
             else
+            {
+                animatorSkillTree.SetBool("Rewind", false);
+                //animatorTokenCount.SetBool("Rewind", false);
                 Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
 }

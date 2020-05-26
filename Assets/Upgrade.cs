@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 
 public class Upgrade : MonoBehaviour
 {
+    [HideInInspector]
     public bool finished = false;
 
     [SerializeField]
@@ -14,11 +15,15 @@ public class Upgrade : MonoBehaviour
     [SerializeField]
     public AbilityType requiredAbility;
     [SerializeField]
+    public bool mainAbility;
+    [SerializeField]
     int cost;
     [SerializeField]
     string name;
     [SerializeField]
     string description;
+    [SerializeField]
+    Sprite image;
 
     //Bör sitta i SkillTree eller PlayerStats
     bool unlocked;
@@ -46,7 +51,7 @@ public class Upgrade : MonoBehaviour
         if (this.abilityType == abilityType)
         {
             OnClick();
-            uiManager.DisplayUpgradeInfo(name, description);
+            uiManager.DisplayUpgradeInfo(name, description, image);
         }
     }
 

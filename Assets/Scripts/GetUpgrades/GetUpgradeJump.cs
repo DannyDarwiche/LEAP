@@ -15,7 +15,7 @@ public class GetUpgradeJump : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerStats.jump = true;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }

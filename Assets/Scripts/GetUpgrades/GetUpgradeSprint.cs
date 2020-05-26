@@ -15,7 +15,7 @@ public class GetUpgradeSprint : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerStats.sprint = true;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }

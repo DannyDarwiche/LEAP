@@ -12,7 +12,10 @@ public class TokenCount : MonoBehaviour
     string description;
 
     [SerializeField]
-    GameObject image;
+    Sprite image;
+
+    //[SerializeField]
+    //GameObject image;
 
     UIManager uiManager;
 
@@ -22,12 +25,12 @@ public class TokenCount : MonoBehaviour
         uiManager = Camera.main.GetComponent<UIManager>();
         PlayerStats.UpdateTokenCount(0);
 
-        image.SetActive(false);
+        //image.SetActive(false);
     }
 
     void CallFromToken()
     {
         PlayerStats.UpdateTokenCount(1);
-        uiManager.DisplayUpgradeInfo(name, description);
+        uiManager.DisplayUpgradeInfo(name, description, image);
     }
 }

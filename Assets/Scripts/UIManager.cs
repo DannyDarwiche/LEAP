@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class UIManager : MonoBehaviour
     //TextMeshProUGUI storeItemDescription;
     //[SerializeField]
     //TextMeshProUGUI playerTokenCount;
+    [SerializeField]
+    Image upgradeAcquiredImage;
     [SerializeField]
     TextMeshProUGUI upgradeAcquiredName;
     [SerializeField]
@@ -31,6 +34,7 @@ public class UIManager : MonoBehaviour
 
         upgradeAcquiredName.enabled = false;
         upgradeAcquiredDescription.enabled = false;
+        upgradeAcquiredImage.enabled = false;
     }
 
     //void Update()
@@ -49,15 +53,15 @@ public class UIManager : MonoBehaviour
     //    }
     //}
 
-    public void DisplayUpgradeInfo(string name, string description)
+    public void DisplayUpgradeInfo(string name, string description, Sprite image)
     {
         //acquiredUITimer = 0;
         upgradeAcquiredName.text = name;
         upgradeAcquiredDescription.text = description;
+        upgradeAcquiredImage.sprite = image;
         upgradeAcquiredName.enabled = true;
         upgradeAcquiredDescription.enabled = true;
-
-        Debug.Log("displayUpgradeInfo");
+        upgradeAcquiredImage.enabled = true;
 
         StartCoroutine(DisplayTimer());
         //displayAcquiredUpgrade = true;
@@ -69,6 +73,7 @@ public class UIManager : MonoBehaviour
 
         upgradeAcquiredName.enabled = false;
         upgradeAcquiredDescription.enabled = false;
+        upgradeAcquiredImage.enabled = false;
     }
 
     //void Raycast()

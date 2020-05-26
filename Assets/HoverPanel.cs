@@ -36,6 +36,11 @@ public class HoverPanel : MonoBehaviour
         panelDescription.text = description;
         panelCost.text = cost.ToString();
 
+        if (PlayerStats.upgradeTokens >= cost)
+            panelCost.color = Color.green;
+        else
+            panelCost.color = Color.red;
+
         //Debug.Log("panel pos: " + position);
 
         //Debug.Log(offset * canvas.lossyScale.x);

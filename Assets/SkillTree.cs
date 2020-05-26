@@ -9,12 +9,30 @@ public class SkillTree : MonoBehaviour
 
     [SerializeField]
     MovingCharacter player;
+
     [SerializeField]
-    Material lockedAbilityMaterial;
+    Color lockedColor;
     [SerializeField]
-    Material unlockableAbilityMaterial;
+    Color unlockableIconColor;
+
+    [Header("MAIN upgrades colors")]
     [SerializeField]
-    Material unlockedAbilityMaterial;
+    Color unlockedMainButtonColor;
+    [SerializeField]
+    Color unlockableMainButtonColor;
+
+    [Header("SUB upgrades color")]
+    [SerializeField]
+    Color unlockedSubButtonColor;
+    [SerializeField]
+    Color unlockableSubButtonColor;
+
+    //[SerializeField]
+    //Material lockedAbilityMaterial;
+    //[SerializeField]
+    //Material unlockableAbilityMaterial;
+    //[SerializeField]
+    //Material unlockedAbilityMaterial;
 
     List<Upgrade> upgrades = new List<Upgrade>();
     bool allFinished = false;
@@ -44,7 +62,7 @@ public class SkillTree : MonoBehaviour
             yield return null;
         }
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     bool CheckIfCompleted()
@@ -73,20 +91,60 @@ public class SkillTree : MonoBehaviour
         {
             if (u.Unlocked())
             {
-                u.gameObject.GetComponent<Image>().material = unlockedAbilityMaterial;
+                //Button Image Color
+                Button button = u.gameObject.GetComponent<Button>();
+                ColorBlock colors = button.colors;
+                if (u.mainAbility)
+                    colors.disabledColor = unlockedMainButtonColor;
+                else
+                    colors.disabledColor = unlockedSubButtonColor;
+                button.colors = colors;
+
+                //Icon Image Color
+                Image[] images = u.gameObject.GetComponentsInChildren<Image>();
+                images[1].color = unlockableIconColor;
+
+                u.gameObject.GetComponent<Button>().interactable = false;
             }
-            else if (IsUnlocked(u.requiredAbility))
+            else if (IsUnlocked(u.requiredAbility) && !u.mainAbility)
             {
-                u.gameObject.GetComponent<Image>().material = unlockableAbilityMaterial;
+                //Button Image Color
+                Button button = u.gameObject.GetComponent<Button>();
+                ColorBlock colors = button.colors;
+                if (u.mainAbility)
+                    colors.normalColor = unlockableMainButtonColor;
+                else
+                    colors.normalColor = unlockableSubButtonColor;
+                button.colors = colors;
+
+                //Icon Image Color
+                Image[] images = u.gameObject.GetComponentsInChildren<Image>();
+                images[1].color = unlockableIconColor;
+
+                u.gameObject.GetComponent<Button>().interactable = true;
             }
             else
             {
-                u.gameObject.GetComponent<Image>().material = lockedAbilityMaterial;
+                //Button Image Color
+                Button button = u.gameObject.GetComponent<Button>();
+                ColorBlock colors = button.colors;
+                colors.disabledColor = lockedColor;
+                button.colors = colors;
+
+                //Icon Image Color
+                Image[] images = u.gameObject.GetComponentsInChildren<Image>();
+                images[1].color = lockedColor;
+
+                u.gameObject.GetComponent<Button>().interactable = false;
             }
         }
 
     }
 
+    //void AtEnd()
+    //{
+    //    gameObject.SetActive(false);
+    //}
 
     public void SetUpgrades(AbilityType abilityType)
     {

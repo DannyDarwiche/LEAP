@@ -11,9 +11,9 @@ public class Orb : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            SkillTree.instance.gameObject.SetActive(true);
+            //SkillTree.instance.gameObject.SetActive(true);
             GameEvents.currentInstance.UpgradeGet(abilityType);
-            SkillTree.instance.gameObject.SetActive(false);
+            //SkillTree.instance.gameObject.SetActive(false);
             Destroy(gameObject);
         }
     }

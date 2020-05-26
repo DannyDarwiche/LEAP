@@ -23,7 +23,7 @@ public class GetUpgradeJumpHeight : MonoBehaviour
             PlayerStats.upgradeTokens -= upgradePrice;
             //PlayerStats.jumpHeight += addedJumpHeight;
             //other.GetComponentInChildren<MovingCharacter>().jumpHeight = PlayerStats.jumpHeight;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }
