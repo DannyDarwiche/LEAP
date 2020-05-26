@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class EnableSkillTree : MonoBehaviour
 {
-    [SerializeField]
-    GameObject skillTree;
+    //[SerializeField]
+    //GameObject skillTree;
 
-    [SerializeField]
-    GameObject tokenImage;
+    //[SerializeField]
+    //GameObject tokenImage;
 
     [SerializeField]
     GameObject hoverPanel;
@@ -16,8 +16,8 @@ public class EnableSkillTree : MonoBehaviour
     [SerializeField]
     Animator animatorSkillTree;
 
-    [SerializeField]
-    Animator animatorTokenCount;
+    //[SerializeField]
+    //Animator animatorTokenCount;
 
     bool activeState = false;
 
