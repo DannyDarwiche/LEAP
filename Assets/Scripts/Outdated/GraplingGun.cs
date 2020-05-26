@@ -162,7 +162,7 @@ public class GraplingGun : MonoBehaviour
         if (!grappling)
             desiredRotation = transform.parent.rotation;
         else
-            desiredRotation = Quaternion.LookRotation(grapplePoint - transform.position);
+            desiredRotation = Quaternion.LookRotation(transform.position-grapplePoint);
 
         transform.rotation = Quaternion.Lerp(transform.rotation, desiredRotation, gunRotationSpeed * Time.deltaTime);
     }
