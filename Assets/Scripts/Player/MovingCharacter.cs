@@ -7,11 +7,18 @@ public class MovingCharacter : MonoBehaviour
 {
     [HideInInspector]
     public bool grappling;
+    [HideInInspector]
+    public bool pickUp;
+    [HideInInspector]
+    public bool throwPickable;
 
     [SerializeField]
     AudioSource audioStep;
     [SerializeField]
     AudioSource audioJump;
+
+    [SerializeField]
+    Animator animator; 
 
     [Header("Basic Movement")]
     [SerializeField, Range(0f, 100f)]
@@ -205,7 +212,7 @@ public class MovingCharacter : MonoBehaviour
 
         cameraFov = Camera.main.GetComponent<CameraFov>();
         speedLines = GetComponentInChildren<ParticleSystem>();
-
+        animator = GetComponent<Animator>();
         playerStats = new PlayerStats();
         playerStats.OnAbilityUnlocked += PlayerStatsOnAbilityUnlocked;
     }
@@ -231,6 +238,8 @@ public class MovingCharacter : MonoBehaviour
 
         StepAudio();
         AudioJump();
+        StepAnimation();
+        
 
         desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && CanDash() && !dashing && dashPhase > 0;
 
@@ -572,5 +581,27 @@ public class MovingCharacter : MonoBehaviour
         }
         else
             audioStep.Stop();
+    }
+
+    void StepAnimation()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length)
+        {
+            if (pickUp)
+                animator.Play("PickUpAnimation");
+            else if (throwPickable)
+                animator.Play("ThrowAnimation");
+            else if (OnGround && desiredVelocity.magnitude > 0)
+                animator.Play("WalkingAnimation");
+            else if (!OnGround && !dashing && velocity.y > 0)
+                animator.Play("JumpAnimation");
+            else if (!OnGround && !dashing && velocity.y < 0)
+                animator.Play("FallAnimation");
+            else
+            {
+                animator.Play("Idle");
+                animator.SetBool("Throw", false);
+            }
+        }
     }
 }

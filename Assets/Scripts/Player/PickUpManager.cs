@@ -16,6 +16,8 @@ public class PickUpManager : MonoBehaviour
     float throwForce = 20;
     [SerializeField]
     GameObject holdPos;
+    [SerializeField]
+    MovingCharacter player;
 
     Drop itemDropScript;
     GameObject raycastedObject;
@@ -23,8 +25,13 @@ public class PickUpManager : MonoBehaviour
     Rigidbody heldItemRigidbody;
     bool isHolding = false;
 
+    
+
     private void Update()
     {
+        if (player.throwPickable)
+            player.throwPickable = false; 
+
         if ((Input.GetMouseButtonDown(0) && isHolding))
             DropItem();
         else if (Input.GetMouseButtonDown(1) && isHolding)
@@ -86,6 +93,7 @@ public class PickUpManager : MonoBehaviour
         heldItemRigidbody.velocity = Vector3.zero;
         itemDropScript = heldItem.GetComponent<Drop>();
         itemDropScript.enabled = true;
+        player.pickUp = true; 
     }
 
     public void DropItem(bool thrown = false)
@@ -94,11 +102,15 @@ public class PickUpManager : MonoBehaviour
         heldItemRigidbody.useGravity = true;
         heldItemRigidbody.velocity = Vector3.zero;
         if (thrown)
-            heldItemRigidbody.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);        
+        {
+            heldItemRigidbody.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
+            player.throwPickable = true; 
+        }    
         itemDropScript.enabled = false;
         itemDropScript.dropitem = false;
         itemDropScript = null;
         heldItem = null;
+        player.pickUp = false; 
     }
 
     //void ThrowItem()
