@@ -7,6 +7,10 @@ public class MovingCharacter : MonoBehaviour
 {
     [HideInInspector]
     public bool grappling;
+    [HideInInspector]
+    public bool pickUp;
+    [HideInInspector]
+    public bool throwPickable;
 
     [HideInInspector]
     public bool pickUp, throwPickable;
@@ -60,6 +64,10 @@ public class MovingCharacter : MonoBehaviour
     [Header("Grappling Gun")]
     [SerializeField]
     GraplingGun graplingGun;
+
+    [Header("Animator")]
+    [SerializeField]
+    Animator animator;
 
     //velocity is used to override the velocity of the Rigidbody component
     //desiredVelocity is the velocity after having the acceleration applied to reach a smoother player motion
@@ -236,6 +244,7 @@ public class MovingCharacter : MonoBehaviour
 
         StepAudio();
         AudioJump();
+        StepAnimation();
 
         desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && PlayerStats.dash && !dashing && dashPhase > 0;
 
@@ -385,6 +394,29 @@ public class MovingCharacter : MonoBehaviour
             audioJump.Play();
         }
     }
+
+    void StepAnimation()
+    {
+        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length)
+        {
+            if (pickUp)
+                animator.Play("PickUpAnimation");
+            else if (throwPickable)
+                animator.Play("ThrowAnimation");
+            else if (OnGround && desiredVelocity.magnitude > 0)
+                animator.Play("WalkingAnimation");
+            else if (!OnGround && !dashing && velocity.y > 0)
+                animator.Play("JumpAnimation");
+            else if (!OnGround && !dashing && velocity.y < 0)
+                animator.Play("FallAnimation");
+            else
+            {
+                animator.Play("Idle");
+                animator.SetBool("Throw", false);
+            }
+        }
+    }
+
     void Dash()
     {
         StartCoroutine(Cast());
@@ -578,4 +610,5 @@ public class MovingCharacter : MonoBehaviour
         else
             audioStep.Stop();
     }
+
 }

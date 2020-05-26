@@ -23,9 +23,7 @@ public class PickUpManager : MonoBehaviour
     GameObject raycastedObject;
     GameObject heldItem;
     Rigidbody heldItemRigidbody;
-    bool isHolding = false;
-
-    
+    bool isHolding = false; 
 
     private void Update()
     {
@@ -93,7 +91,7 @@ public class PickUpManager : MonoBehaviour
         heldItemRigidbody.velocity = Vector3.zero;
         itemDropScript = heldItem.GetComponent<Drop>();
         itemDropScript.enabled = true;
-        player.pickUp = true; 
+        player.pickUp = true;
     }
 
     public void DropItem(bool thrown = false)
@@ -104,7 +102,7 @@ public class PickUpManager : MonoBehaviour
         if (thrown)
         {
             heldItemRigidbody.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
-            //player.throwPickable = true; 
+            player.throwPickable = true;
         }    
         itemDropScript.enabled = false;
         itemDropScript.dropitem = false;

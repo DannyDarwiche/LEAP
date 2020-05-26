@@ -73,7 +73,7 @@ public class Upgrade : MonoBehaviour
     public void OnHoverEnter()
     {
         HoverPanel.instance.gameObject.SetActive(true);
-        HoverPanel.instance.UpdatePanel(name, description, cost, transform.TransformVector(transform.position), transformWidth);
+        HoverPanel.instance.UpdatePanel(name, description, cost, transform.TransformVector(transform.position), transformWidth, unlocked);
         //Debug.Log("x: " + transform.position.x);
         //Debug.Log("width: " + transformWidth);
     }

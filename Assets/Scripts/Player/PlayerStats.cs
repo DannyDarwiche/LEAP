@@ -35,7 +35,7 @@ public enum AbilityType
 
 public class PlayerStats : MonoBehaviour
 {
-    public static int upgradeTokens = 5;
+    public static int upgradeTokens = 50;
 
     public static bool jump = false;
 

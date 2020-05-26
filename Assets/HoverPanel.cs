@@ -30,13 +30,18 @@ public class HoverPanel : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void UpdatePanel(string name, string description, int cost, Vector3 position, float offset)
+    public void UpdatePanel(string name, string description, int cost, Vector3 position, float offset, bool unlocked)
     {
         panelName.text = name;
         panelDescription.text = description;
         panelCost.text = cost.ToString();
 
-        if (PlayerStats.upgradeTokens >= cost)
+        if (unlocked || cost == 0)
+        {
+            panelCost.color = Color.white;
+            panelCost.text = "-";
+        }
+        else if (PlayerStats.upgradeTokens >= cost)
             panelCost.color = Color.green;
         else
             panelCost.color = Color.red;
