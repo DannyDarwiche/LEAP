@@ -7,28 +7,21 @@ public class MovingCharacter : MonoBehaviour
 {
     [HideInInspector]
     public bool grappling;
-    [HideInInspector]
-    public bool pickUp;
-    [HideInInspector]
-    public bool throwPickable;
 
     [SerializeField]
     AudioSource audioStep;
     [SerializeField]
     AudioSource audioJump;
 
-    [SerializeField]
-    Animator animator; 
-
     [Header("Basic Movement")]
     [SerializeField, Range(0f, 100f)]
-    float maxSpeed = 6f;
+    public float maxSpeed = 6f;
     [SerializeField, Range(0f, 100f)]
     float maxAcceleration = 10f, maxAirAccelertaion = 1f;
     [SerializeField, Range(0f, 10f)]
     public float jumpHeight = 2.5f;
     [SerializeField, Range(0, 5)]
-    int maxAirJumps = 2;
+    public int maxAirJumps = 2;
     [SerializeField, Range(0f, 90f)]
     float maxGroundAngle = 25f, maxStairsAngle = 50f;
     [SerializeField, Range(0f, 100f)]
@@ -49,13 +42,13 @@ public class MovingCharacter : MonoBehaviour
 
     [Header("Dash")]
     [SerializeField, Range(0f, 5f)]
-    int dashPhase = 1;
+    public int dashPhase = 1;
     [SerializeField, Range(0f, 100f)]
     float dashForce = 30f;
     [SerializeField, Min(0f)]
-    float dashDuration = 0.2f;
+    public float dashDuration = 0.2f;
     [SerializeField, Range(0f, 3f)]
-    float dashCooldown = 1f;
+    public float dashCooldown = 1f;
     [SerializeField]
     float normalFov = 60f;
     [SerializeField]
@@ -94,104 +87,106 @@ public class MovingCharacter : MonoBehaviour
 
     int stepsSinceLastGrounded, stepsSinceLastJump;
 
-    public bool CanJump()
-    {
-        return playerStats.IsAbilityUnlocked(AbilityType.Jump);
-    }
+    #region
+    //public bool CanJump()
+    //{
+    //    return playerStats.IsAbilityUnlocked(AbilityType.Jump);
+    //}
 
-    public bool CanDash()
-    {
-        return playerStats.IsAbilityUnlocked(AbilityType.Dash);
-    }
+    //public bool CanDash()
+    //{
+    //    return playerStats.IsAbilityUnlocked(AbilityType.Dash);
+    //}
 
-    public bool CanSprint()
-    {
-        return playerStats.IsAbilityUnlocked(AbilityType.Sprint);
-    }
+    //public bool CanSprint()
+    //{
+    //    return playerStats.IsAbilityUnlocked(AbilityType.Sprint);
+    //}
 
-    public bool CanWallJump()
-    {
-        return playerStats.IsAbilityUnlocked(AbilityType.WallJump);
-    }
+    //public bool CanWallJump()
+    //{
+    //    return playerStats.IsAbilityUnlocked(AbilityType.WallJump);
+    //}
 
-    public void SetJumpHeight(float addedJumpHeight)
-    {
-        jumpHeight = jumpHeight + addedJumpHeight;
-    }
+    //public void SetJumpHeight(float addedJumpHeight)
+    //{
+    //    jumpHeight = jumpHeight + addedJumpHeight;
+    //}
 
-    public void SetAirJump()
-    {
-        maxAirJumps++;
-    }
+    //public void SetAirJump()
+    //{
+    //    maxAirJumps++;
+    //}
 
-    public void SetMaxDashes()
-    {
-        dashPhase++;
-    }
+    //public void SetMaxDashes()
+    //{
+    //    dashPhase++;
+    //}
 
-    public void SetDashCooldown()
-    {
-        dashCooldown = dashCooldown / 2;
-    }
+    //public void SetDashCooldown()
+    //{
+    //    dashCooldown = dashCooldown / 2;
+    //}
 
-    public void SetDashForce()
-    {
-        dashForce += 30f;
-    }
+    //public void SetDashForce()
+    //{
+    //    dashForce += 30f;
+    //}
 
-    public void SetPickUp()
-    {
-        GetComponentInChildren<PickUpManager>().enabled = true;
-    }
+    //public void SetPickUp()
+    //{
+    //    GetComponentInChildren<PickUpManager>().enabled = true;
+    //}
 
-    public void SetMaxSpeed(float addedSpeed)
-    {
-        maxSpeed = maxSpeed + addedSpeed;
-    }
+    //public void SetMaxSpeed(float addedSpeed)
+    //{
+    //    maxSpeed = maxSpeed + addedSpeed;
+    //}
 
-    public void SetCrouch()
-    {
-        GetComponent<Crouch>().enabled = true;
-    }
+    //public void SetCrouch()
+    //{
+    //    GetComponent<Crouch>().enabled = true;
+    //}
 
-    public PlayerStats GetPlayerStats()
-    {
-        return playerStats;
-    }
+    //public PlayerStats GetPlayerStats()
+    //{
+    //    return playerStats;
+    //}
 
-    void PlayerStatsOnAbilityUnlocked(object sender, PlayerStats.OnAbilityUnlockedEventArgs e)
-    {
-        switch (e.abilityType)
-        {
-            case AbilityType.JumpHeightUp1:
-            case AbilityType.JumpHeightUp2:
-                SetJumpHeight(1f);
-                break;
-            case AbilityType.AirJumpUp1:
-            case AbilityType.AirJumpUp2:
-                SetAirJump();
-                break;
-            case AbilityType.AddedDash:
-                SetMaxDashes();
-                break;
-            case AbilityType.DashCooldown:
-                SetDashCooldown();
-                break;
-            case AbilityType.DashForceUp:
-                SetDashForce();
-                break;
-            case AbilityType.PickUp:
-                SetPickUp();
-                break;
-            case AbilityType.MoveSpeedUp1:
-            case AbilityType.MoveSpeedUp2:
-                SetMaxSpeed(2f);
-                break;
-            case AbilityType.Crouch:
-                SetCrouch();
-                break;
-        }
-    }
+    //void PlayerStatsOnAbilityUnlocked(object sender, PlayerStats.OnAbilityUnlockedEventArgs e)
+    //{
+    //    switch (e.abilityType)
+    //    {
+    //        case AbilityType.JumpHeightUp1:
+    //        case AbilityType.JumpHeightUp2:
+    //            SetJumpHeight(1f);
+    //            break;
+    //        case AbilityType.AirJumpUp1:
+    //        case AbilityType.AirJumpUp2:
+    //            SetAirJump();
+    //            break;
+    //        case AbilityType.AddedDash:
+    //            SetMaxDashes();
+    //            break;
+    //        case AbilityType.DashCooldown:
+    //            SetDashCooldown();
+    //            break;
+    //        case AbilityType.DashForceUp:
+    //            SetDashForce();
+    //            break;
+    //        case AbilityType.PickUp:
+    //            SetPickUp();
+    //            break;
+    //        case AbilityType.MoveSpeedUp1:
+    //        case AbilityType.MoveSpeedUp2:
+    //            SetMaxSpeed(2f);
+    //            break;
+    //        case AbilityType.Crouch:
+    //            SetCrouch();
+    //            break;
+    //    }
+    //}
+    #endregion
 
     bool OnGround => groundContactCount > 0;
     bool DashGroundReset => OnGround; //Kan vi inte bara använda OnGround direkt?
@@ -212,9 +207,9 @@ public class MovingCharacter : MonoBehaviour
 
         cameraFov = Camera.main.GetComponent<CameraFov>();
         speedLines = GetComponentInChildren<ParticleSystem>();
-        animator = GetComponent<Animator>();
-        playerStats = new PlayerStats();
-        playerStats.OnAbilityUnlocked += PlayerStatsOnAbilityUnlocked;
+
+        //playerStats = new PlayerStats();
+        //playerStats.OnAbilityUnlocked += PlayerStatsOnAbilityUnlocked;
     }
     void Update()
     {
@@ -227,7 +222,7 @@ public class MovingCharacter : MonoBehaviour
         playerInput.x = Input.GetAxisRaw("Horizontal");
         playerInput.y = Input.GetAxisRaw("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
-        sprint = Input.GetButton("Sprint") && CanSprint() && OnGround;
+        sprint = Input.GetButton("Sprint") && PlayerStats.sprint && OnGround;
         speed = Mathf.MoveTowards(speed, sprint ? maxSprintSpeed : maxSpeed, maxAcceleration / 4 * Time.unscaledDeltaTime);
         desiredVelocity = new Vector3(playerInput.x, 0f, playerInput.y) * speed;
         if (wallJumpTimer >= 0)
@@ -238,13 +233,11 @@ public class MovingCharacter : MonoBehaviour
 
         StepAudio();
         AudioJump();
-        StepAnimation();
-        
 
-        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && CanDash() && !dashing && dashPhase > 0;
+        desiredDash |= Input.GetKeyDown(KeyCode.LeftShift) && PlayerStats.dash && !dashing && dashPhase > 0;
 
         //With Update and FixedUpdate not always being in sync |= will guarantee that the input is never lost
-        desiredJump |= Input.GetButtonDown("Jump") && CanJump() /*PlayerStats.jump*/ && !desiredDash && !dashing;
+        desiredJump |= Input.GetButtonDown("Jump") && PlayerStats.jump /*PlayerStats.jump*/ && !desiredDash && !dashing;
     }
     /*
      * FixedUpdate should be responsible for alll physics calculations and changes for the script
@@ -331,7 +324,7 @@ public class MovingCharacter : MonoBehaviour
             //Change - correction because removes air jump on wall jump below
             jumpPhase += 1;
         }
-        else if (OnSteep && CanWallJump())
+        else if (OnSteep && PlayerStats.walljump)
         {
 
             //if (collidedWallsList.Count > 0 && collidedWallsList[collidedWallsList.Count - 1] == currentWall)
@@ -581,27 +574,5 @@ public class MovingCharacter : MonoBehaviour
         }
         else
             audioStep.Stop();
-    }
-
-    void StepAnimation()
-    {
-        if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= animator.GetCurrentAnimatorStateInfo(0).length)
-        {
-            if (pickUp)
-                animator.Play("PickUpAnimation");
-            else if (throwPickable)
-                animator.Play("ThrowAnimation");
-            else if (OnGround && desiredVelocity.magnitude > 0)
-                animator.Play("WalkingAnimation");
-            else if (!OnGround && !dashing && velocity.y > 0)
-                animator.Play("JumpAnimation");
-            else if (!OnGround && !dashing && velocity.y < 0)
-                animator.Play("FallAnimation");
-            else
-            {
-                animator.Play("Idle");
-                animator.SetBool("Throw", false);
-            }
-        }
     }
 }

@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<< HEAD:Assets/Graphics/Shaders/Textures.meta
 guid: d9b82197cce7d304a9d3c6e8fe5b0558
+=======
+guid: 31a34ff14cc8b5c42a9e6381fe51d0bd
+>>>>>>> cb4f3e143693b3f87b4f9bebde191b47850bd678:Assets/AurynSky/Arcades Pack 02/Textures.meta
+=======
+guid: 4d8bf762b20d6d048ae5287c4f1c49e5
+>>>>>>> cb4f3e143693b3f87b4f9bebde191b47850bd678
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

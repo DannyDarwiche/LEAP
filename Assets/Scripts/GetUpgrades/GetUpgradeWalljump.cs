@@ -15,7 +15,7 @@ public class GetUpgradeWalljump : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerStats.walljump = true;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }

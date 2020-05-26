@@ -19,7 +19,7 @@ public class GetUpgradeCrouch : MonoBehaviour
         {
             PlayerStats.upgradeTokens -= upgradePrice;
             other.GetComponentInChildren<Crouch>().enabled = true;
-            other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
+            //other.GetComponentInChildren<UIManager>().DisplayUpgradeInfo(upgradeName, upgradeDescription);
             Destroy(gameObject);
         }
     }

@@ -2,87 +2,105 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    //[SerializeField]
+    //TextMeshProUGUI storeItemPrice;
+    //[SerializeField]
+    //TextMeshProUGUI storeItemName;
+    //[SerializeField]
+    //TextMeshProUGUI storeItemDescription;
+    //[SerializeField]
+    //TextMeshProUGUI playerTokenCount;
     [SerializeField]
-    TextMeshProUGUI storeItemPrice;
-    [SerializeField]
-    TextMeshProUGUI storeItemName;
-    [SerializeField]
-    TextMeshProUGUI storeItemDescription;
-    [SerializeField]
-    TextMeshProUGUI playerTokenCount;
+    Image upgradeAcquiredImage;
     [SerializeField]
     TextMeshProUGUI upgradeAcquiredName;
     [SerializeField]
     TextMeshProUGUI upgradeAcquiredDescription;
-    [SerializeField]
-    LayerMask storeLayer;
-
-    bool displayAcquiredUpgrade = false;
-    float acquiredUITimer = 0;
+    [SerializeField, Range(0f, 10f)]
     float acquiredUITimeDelay = 5f;
+    //[SerializeField]
+    //LayerMask storeLayer;
+
+    //bool displayAcquiredUpgrade = false;
+    //float acquiredUITimer = 0;
 
     void Awake()
     {
-        SetActive(false);
+        //SetActive(false);
 
         upgradeAcquiredName.enabled = false;
         upgradeAcquiredDescription.enabled = false;
+        upgradeAcquiredImage.enabled = false;
     }
 
-    void Update()
-    {
-        Raycast();
+    //void Update()
+    //{
+    //    Raycast();
 
-        if (displayAcquiredUpgrade)
-        {
-            acquiredUITimer += Time.deltaTime;
-            if (acquiredUITimer >= acquiredUITimeDelay)
-            {
-                upgradeAcquiredName.enabled = false;
-                upgradeAcquiredDescription.enabled = false;
-                displayAcquiredUpgrade = false;
-            }
-        }
-    }
+    //    if (displayAcquiredUpgrade)
+    //    {
+    //        acquiredUITimer += Time.deltaTime;
+    //        if (acquiredUITimer >= acquiredUITimeDelay)
+    //        {
+    //            upgradeAcquiredName.enabled = false;
+    //            upgradeAcquiredDescription.enabled = false;
+    //            displayAcquiredUpgrade = false;
+    //        }
+    //    }
+    //}
 
-    public void DisplayUpgradeInfo(string name, string description)
+    public void DisplayUpgradeInfo(string name, string description, Sprite image)
     {
-        acquiredUITimer = 0;
+        //acquiredUITimer = 0;
         upgradeAcquiredName.text = name;
         upgradeAcquiredDescription.text = description;
+        upgradeAcquiredImage.sprite = image;
         upgradeAcquiredName.enabled = true;
         upgradeAcquiredDescription.enabled = true;
-        displayAcquiredUpgrade = true;
+        upgradeAcquiredImage.enabled = true;
+
+        StartCoroutine(DisplayTimer());
+        //displayAcquiredUpgrade = true;
     }
 
-    void Raycast()
+    IEnumerator DisplayTimer()
     {
-        RaycastHit hit;
-        Vector3 fwd = transform.TransformDirection(Vector3.forward);
+        yield return new WaitForSeconds(acquiredUITimeDelay);
 
-        if (Physics.Raycast(transform.position, fwd, out hit, 10, storeLayer))
-        {
-            SetActive(true);
-
-            StoreInfo storeInfo = hit.transform.GetComponent<StoreInfo>();
-            storeItemPrice.text = "Price: " + storeInfo.GetPrice().ToString();
-            storeItemName.text = storeInfo.GetName();
-            storeItemDescription.text = storeInfo.GetDescription();
-            playerTokenCount.text = "Tokens Left: " + PlayerStats.upgradeTokens.ToString();
-        }
-        else
-            SetActive(false);
+        upgradeAcquiredName.enabled = false;
+        upgradeAcquiredDescription.enabled = false;
+        upgradeAcquiredImage.enabled = false;
     }
 
-    void SetActive(bool status)
-    {
-        storeItemPrice.enabled = status;
-        storeItemName.enabled = status;
-        storeItemDescription.enabled = status;
-        playerTokenCount.enabled = status;
-    }
+    //void Raycast()
+    //{
+    //    RaycastHit hit;
+    //    Vector3 fwd = transform.TransformDirection(Vector3.forward);
+
+    //    if (Physics.Raycast(transform.position, fwd, out hit, 10, storeLayer))
+    //    {
+    //        SetActive(true);
+
+    //        StoreInfo storeInfo = hit.transform.GetComponent<StoreInfo>();
+    //        storeItemPrice.text = "Price: " + storeInfo.GetPrice().ToString();
+    //        storeItemName.text = storeInfo.GetName();
+    //        storeItemDescription.text = storeInfo.GetDescription();
+    //        playerTokenCount.text = "Tokens Left: " + PlayerStats.upgradeTokens.ToString();
+    //    }
+    //    else
+    //        SetActive(false);
+    //}
+
+    //void SetActive(bool status)
+    //{
+    //    storeItemPrice.enabled = status;
+    //    storeItemName.enabled = status;
+    //    storeItemDescription.enabled = status;
+    //    playerTokenCount.enabled = status;
+    //}
 
 }
