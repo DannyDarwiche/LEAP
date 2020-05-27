@@ -8,7 +8,7 @@ public class GroundSpikeTrap : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            collision.gameObject.GetComponent<Respawn>().TriggerRespawn();
+            collision.gameObject.GetComponent<Respawn>().TriggerRespawn(false);
             //print("works");
         }
     }
