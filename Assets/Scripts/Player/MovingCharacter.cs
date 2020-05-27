@@ -12,8 +12,6 @@ public class MovingCharacter : MonoBehaviour
     [HideInInspector]
     public bool throwPickable;
 
-    [HideInInspector]
-    public bool pickUp, throwPickable;
 
     [SerializeField]
     AudioSource audioStep;

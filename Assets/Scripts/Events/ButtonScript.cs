@@ -32,7 +32,6 @@ public class ButtonScript : MonoBehaviour
 
     void OnMouseDown()
     {
-        Debug.Log("Button");
         if (Vector3.Distance(player.transform.position, transform.position) <= pressDistance)
         {
             if (!activated)
