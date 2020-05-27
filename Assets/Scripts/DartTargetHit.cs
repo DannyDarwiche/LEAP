@@ -22,7 +22,6 @@ public class DartTargetHit : MonoBehaviour
         {
             if (!activated)
             {
-                Debug.Log("Animation Here");
                 anim.Play("MoveCartoonDart");
                 GameEvents.currentInstance.ButtonTriggerOn(id);
                 activated = true;
