@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer), typeof(MovingCharacter))]
+[RequireComponent(typeof(LineRenderer))]
 public class GraplingGun : MonoBehaviour
 {
     [SerializeField]
