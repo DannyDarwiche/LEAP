@@ -7,10 +7,6 @@ public class MovingCharacter : MonoBehaviour
 {
     [HideInInspector]
     public bool grappling;
-    [HideInInspector]
-    public bool pickUp;
-    [HideInInspector]
-    public bool throwPickable;
 
 
     [SerializeField]

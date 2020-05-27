@@ -83,4 +83,17 @@ public class GameEvents : MonoBehaviour
         if (OnPlatformTriggerOff != null)
             OnPlatformTriggerOff(id); 
     }
+
+    public event Action<int> OnTriggerOn;
+    public void TriggerOn(int id)
+    {
+        if (OnTriggerOn != null)
+            OnTriggerOn(id);
+    }
+    public event Action<int> OnTriggerOff;
+    public void TriggerOff(int id)
+    {
+        if (OnTriggerOff != null)
+            OnTriggerOff(id);
+    }
 }
