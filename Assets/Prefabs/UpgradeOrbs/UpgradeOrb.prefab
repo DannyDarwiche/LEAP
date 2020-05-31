@@ -14275,7 +14275,7 @@ GameObject:
   - component: {fileID: 1158835009291755089}
   m_Layer: 0
   m_Name: UpgradeOrb
-  m_TagString: UpgradeButton
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14323,6 +14323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8a223260ed757340a983cf9f9552e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  abilityType: 0
 --- !u!1 &76302986281264429
 GameObject:
   m_ObjectHideFlags: 0

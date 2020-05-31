@@ -5,7 +5,9 @@ using UnityEngine;
 public class Respawn : MonoBehaviour
 {
     [SerializeField]
-    Transform spawnPoint;
+    Transform spawnPointHub;
+    [SerializeField]
+    Transform spawnPointCastle;
     [SerializeField]
     float respawnTriggerHeight = -120;
 
@@ -19,13 +21,16 @@ public class Respawn : MonoBehaviour
     void Update()
     {
         if (transform.position.y < respawnTriggerHeight)
-            TriggerRespawn();
+            TriggerRespawn(true);
     }
 
-    public void TriggerRespawn()
+    public void TriggerRespawn(bool hub)
     {
         playerRigidbody.velocity = Vector3.zero;
         playerRigidbody.angularVelocity = Vector3.zero;
-        transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+        if (hub)
+            transform.SetPositionAndRotation(spawnPointHub.position, spawnPointHub.rotation);
+        else
+            transform.SetPositionAndRotation(spawnPointCastle.position, spawnPointCastle.rotation);
     }
 }
