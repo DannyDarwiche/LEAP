@@ -8,6 +8,9 @@ public class MovingCharacter : MonoBehaviour
     [HideInInspector]
     public bool grappling;
 
+    [HideInInspector]
+    public bool pickUp, throwPickable;
+
 
     [SerializeField]
     AudioSource audioStep;
