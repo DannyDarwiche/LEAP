@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RotateEventPP : MonoBehaviour
 {
+    //Isak
+    //Rotates object when activated by preassure plate.
+
     [SerializeField]
     int id;
     [SerializeField]

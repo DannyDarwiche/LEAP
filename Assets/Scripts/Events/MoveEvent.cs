@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MoveEvent : MonoBehaviour
 {
+    //Isak, Danny, Ai, Alexander and Muhammad
+    //Moves object activated by button.
+
     [SerializeField]
     int id;
     [SerializeField]

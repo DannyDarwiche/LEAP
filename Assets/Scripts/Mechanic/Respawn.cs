@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Respawn : MonoBehaviour
 {
+    //Danny
+    //Kills the players Y value becomes to small i.e when they fall off an island.
+
     [SerializeField]
     Transform spawnPointHub;
     [SerializeField]

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DisableEnableEvent : MonoBehaviour
 {
+    //Isak
+    //Enables and disables objects when a button is pressed.
+
     [SerializeField]
     int id;
 

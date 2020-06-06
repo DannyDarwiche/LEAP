@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class DisableEnableEventPuzzle : MonoBehaviour
 {
+    //Isak
+    //Activates and deactivates based on the status of a certain puzzle.
+
     [SerializeField]
     int id;
 

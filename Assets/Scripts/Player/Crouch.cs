@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Crouch : MonoBehaviour
 {
+    //Isak, Danny and Ai
+    //Makes the objects transform scale smaller.
+
     CapsuleCollider playerCollider;
 
     void Awake()
@@ -13,12 +16,6 @@ public class Crouch : MonoBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.LeftControl))
-        //    playerCollider.height = playerCollider.height / 2;
-
-        //if (Input.GetKeyUp(KeyCode.LeftControl))
-        //    playerCollider.height = playerCollider.height * 2;
-
         if (Input.GetKeyDown(KeyCode.LeftControl))
            gameObject.transform.localScale = new Vector3(1,0.5f,1);
 

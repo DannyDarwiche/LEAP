@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class CarryRigidbodies : MonoBehaviour
 {
+    //Isak
+    //Carries all rigidbody within the child sensors.
+
     [SerializeField]
     bool useSensors;
 

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class ColorPuzzle : MonoBehaviour
 {
+    //Isak
+    //Activates an event if all color matches are correct.
+
     [SerializeField]
     int id;
     [SerializeField]

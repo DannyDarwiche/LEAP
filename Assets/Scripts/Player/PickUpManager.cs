@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class PickUpManager : MonoBehaviour
 {
+    //Isak, Ai, Muhammad, Alexander and Danny
+    //Picks up, drops and throws pickable objects. 
+
     [SerializeField]
     private int rayLength = 10;
     [SerializeField]
@@ -110,17 +113,6 @@ public class PickUpManager : MonoBehaviour
         heldItem = null;
         player.pickUp = false; 
     }
-
-    //void ThrowItem()
-    //{
-    //    heldItemRigidbody.useGravity = true;
-    //    heldItemRigidbody.AddForce(Camera.main.transform.forward * throwForce, ForceMode.Impulse);
-    //    itemDropScript.enabled = false;
-    //    itemDropScript.dropitem = false;
-    //    itemDropScript = null;
-    //    heldItem = null;
-    //    isHolding = false;
-    //}
 
     void CrosshairActive()
     {

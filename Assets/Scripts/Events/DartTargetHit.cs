@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class DartTargetHit : MonoBehaviour
 {
+    //Alexander
+    //Activates an event upon collision and plays an animation.
+
     [SerializeField]
     int id;
     [SerializeField]
-    Animator anim; 
+    Animator animator; 
 
     bool activated = false;
 
     void Start()
     {
-        anim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -22,7 +25,7 @@ public class DartTargetHit : MonoBehaviour
         {
             if (!activated)
             {
-                anim.Play("MoveCartoonDart");
+                animator.Play("MoveCartoonDart");
                 GameEvents.currentInstance.ButtonTriggerOn(id);
                 activated = true;
             }

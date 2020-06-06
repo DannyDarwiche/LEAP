@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Destructible))]
 public class BreakPoint : MonoBehaviour
 {
+    //Isak
+    //Activates when enough force is applied upon collision.
+
     [SerializeField]
     Destructible destructible;
 
@@ -14,8 +17,6 @@ public class BreakPoint : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         Vector3 impactForce = collision.impulse;
-        //Vector3 impactForce = Vector3.Scale(collision.impulse, transform.forward);
-        Debug.Log(impactForce.magnitude);
         if (impactForce.magnitude > breakForce)
             destructible.Break();
     }

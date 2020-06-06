@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ColorMatch : MonoBehaviour
 {
+    //Isak
+    //Check if an other object has the same color as this game object.
+
     [HideInInspector]
     public bool correctCube;
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ButtonScript : MonoBehaviour
 {
+    //Isak, Danny, Ai, Muhammad and Alexander
+    //Activates an event when a button is pressed or collided with.
+
     [SerializeField]
     int id;
     [SerializeField]

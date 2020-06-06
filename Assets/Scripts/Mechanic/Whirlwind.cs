@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Whirlwind : MonoBehaviour
 {
+    //Isak, Danny and Ai
+    //When an object is inside the trigger collider a upwards force is applied.
+
     void OnTriggerStay(Collider other)
     {
         other.attachedRigidbody.AddForce(transform.up * 75, ForceMode.Acceleration);

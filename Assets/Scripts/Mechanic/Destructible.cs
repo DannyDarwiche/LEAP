@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class Destructible : MonoBehaviour
 {
+    //Ai
+    //When activated replaces the game object with smaller pieces.
+
     [SerializeField]
     GameObject destroyedVersion;
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FireCannon : MonoBehaviour
 {
+    //Danny
+    //When a torch enters the fuse's trigger collider, a cannonball is fired.
+
     [SerializeField]
     GameObject cannonBallPrefab;
     [SerializeField]

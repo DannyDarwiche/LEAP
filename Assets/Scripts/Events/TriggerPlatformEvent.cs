@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TriggerPlatformEvent : MonoBehaviour
 {
+    //Alexander
+
     [SerializeField]
     int id;
 
@@ -11,7 +13,5 @@ public class TriggerPlatformEvent : MonoBehaviour
     {
         if(collision.gameObject.tag == ("Player"))
             GameEvents.currentInstance.PlatformTriggerOn(id);
-        //else
-        //    GameEvents.currentInstance.PlatformTriggerOff(id);
     }
 }

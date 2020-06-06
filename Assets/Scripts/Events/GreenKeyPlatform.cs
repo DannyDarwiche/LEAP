@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GreenKeyPlatform : MonoBehaviour
 {
+    //Alexander
+    //Triggers event when the correct object enters the trigger collider.
 
     [SerializeField]
     int id;
@@ -12,21 +14,16 @@ public class GreenKeyPlatform : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("KeyGreen"))
-        {
+        if (other.CompareTag("KeyGreen"))
             gotTriggerd = true;
-        }
         else
-        {
-            gotTriggerd = false; 
-        }
+            gotTriggerd = false;
     }
+
     void Update()
     {
         if (gotTriggerd)
-        {
             GameEvents.currentInstance.PlatformTriggerOn(id);
-        }
         else if (!gotTriggerd)
             GameEvents.currentInstance.PlatformTriggerOff(id);
     }

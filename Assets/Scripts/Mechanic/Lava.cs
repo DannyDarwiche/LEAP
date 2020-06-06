@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Lava : MonoBehaviour
 {
+    //Isak
+    //Kills the player upon entering the lavas trigger.
+
     [SerializeField]
     Rigidbody playerBody;
     [SerializeField]

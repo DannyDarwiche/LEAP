@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MoveEventMagnet : MonoBehaviour
 {
+    //Isak
+    //Moves object in a certain direction activated by button.
+
     [SerializeField]
     int id;
     [SerializeField]

@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ActivateGrabEvent : MonoBehaviour
 {
+    //Isak
+    //When activated by a button it enables the object to pick up other objects like a magnet.
+
     [SerializeField]
     int id;
     [SerializeField]

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class MovingCharacter : MonoBehaviour
 {
+    //Isak, Alexander, Ai, Muhammad and Danny
+    //Handles player input, movement and abilites.
+
     [HideInInspector]
     public bool grappling;
 

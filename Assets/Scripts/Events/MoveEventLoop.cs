@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MoveEventLoop : MonoBehaviour
 {
+    //Isak
+    //Moves object activated by button forth and back.
+
     [SerializeField]
     int id;
     [SerializeField]

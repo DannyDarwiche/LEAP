@@ -5,6 +5,9 @@ using System;
 
 public class GameEvents : MonoBehaviour
 {
+    //Isak, Danny, Ai, Alexander and Muhammad
+    //Collection of all custom events.
+
     public static GameEvents currentInstance;
 
     void Awake()

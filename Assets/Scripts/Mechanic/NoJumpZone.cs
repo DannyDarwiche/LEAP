@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class NoJumpZone : MonoBehaviour
 {
+    //Isak
+    //When the player enters the trigger their jump height is set to 0.
+
     float savedValue;
 
     void OnTriggerEnter(Collider other)

@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    //Isak, Alexander, Ai, Muhammad and Danny
+    //Rotates the players y rotation based on mouse input.
+    //Rotates the cameras x rotation based on mouse input
+
     [SerializeField]
     Transform playerBody;
     [SerializeField]
@@ -11,12 +15,12 @@ public class CameraController : MonoBehaviour
 
     float xRotation = 0f;
 
-    private void Start()
+    void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void Update()
+    void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;

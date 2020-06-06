@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PillEvent : MonoBehaviour
 {
+    //Alexander
+    //Activates event when object is clicked.
 
     [SerializeField]
     int id;
@@ -13,7 +15,6 @@ public class PillEvent : MonoBehaviour
     float pressDistance;
 
     bool activated;
-
 
     void OnMouseDown()
     {

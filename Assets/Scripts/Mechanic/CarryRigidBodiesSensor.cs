@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class CarryRigidBodiesSensor : MonoBehaviour
 {
+    //Isak
+    //Sensor that checks how many rigidbodies stand on a platform.
+
     [HideInInspector]
     public CarryRigidbodies carrier;
     [HideInInspector]

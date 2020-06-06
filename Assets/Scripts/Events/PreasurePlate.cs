@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PreasurePlate : MonoBehaviour
 {
+    //Isak, Danny and Ai
+    //Activates event based on mass on a preassure plate.
+
     [SerializeField]
     int id;
     [SerializeField]

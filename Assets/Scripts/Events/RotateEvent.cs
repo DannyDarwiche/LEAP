@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RotateEvent : MonoBehaviour
 {
+    //Isak
+    //Rotates object when activated by button.
+
     [SerializeField]
     int id;
     [SerializeField]

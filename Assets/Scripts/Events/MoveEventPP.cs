@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MoveEventPP : MonoBehaviour
 {
+    //Isak, Danny, Ai, Alexander and Muhammad
+    //Moves object activated by pressure plate.
+
     [SerializeField]
     int id;
     [SerializeField]
