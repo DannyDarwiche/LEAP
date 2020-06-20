@@ -72,7 +72,7 @@ public class GameEvents : MonoBehaviour
             OnPuzzleFailedTrigger(id);
     }
 
-
+    //GreenKeyPlatform
     public event Action<int> OnPlatformTriggerOn; 
     public void PlatformTriggerOn(int id)
     {
@@ -80,6 +80,7 @@ public class GameEvents : MonoBehaviour
             OnPlatformTriggerOn(id); 
     }
 
+    //GreenKeyPlatform
     public event Action<int> OnPlatformTriggerOff; 
     public void PlatformTriggerOff(int id)
     {
