@@ -7,7 +7,7 @@ public class TriggerPlatformEvent : MonoBehaviour
     //Alexander
 
     [SerializeField]
-    int id;
+    float id;
 
     void OnCollisionEnter(Collision collision)
     {

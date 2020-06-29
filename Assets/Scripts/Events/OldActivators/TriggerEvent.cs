@@ -8,7 +8,7 @@ public class TriggerEvent : MonoBehaviour
     //Activates event when entering a trigger collider.
 
     [SerializeField]
-    int id;
+    float id;
 
     void OnTriggerEnter(Collider other)
     {

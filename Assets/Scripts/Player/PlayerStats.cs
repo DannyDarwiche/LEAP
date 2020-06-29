@@ -38,7 +38,7 @@ public class PlayerStats : MonoBehaviour
     //Isak and Danny
     //Collection of all the players possible upgrades and abilities. 
 
-    public static int upgradeTokens = 0;
+    public static int upgradeTokens = 50;
 
     public static bool jump = false;
 

@@ -8,7 +8,7 @@ public class DisableEnableEventPuzzle : MonoBehaviour
     //Activates and deactivates based on the status of a certain puzzle.
 
     [SerializeField]
-    int id;
+    float id;
 
     Renderer objectRenderer;
     Collider objectCollider;
@@ -21,7 +21,7 @@ public class DisableEnableEventPuzzle : MonoBehaviour
         GameEvents.currentInstance.OnPuzzleFailedTrigger += Deactivated;
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if(id == this.id)
         {
@@ -30,7 +30,7 @@ public class DisableEnableEventPuzzle : MonoBehaviour
         }
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if(id == this.id)
         {

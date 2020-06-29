@@ -8,7 +8,7 @@ public class DisableEnableEvent : MonoBehaviour
     //Enables and disables objects when a button is pressed.
 
     [SerializeField]
-    int id;
+    float id;
 
     Renderer objectRenderer;
     Collider objectCollider;
@@ -21,7 +21,7 @@ public class DisableEnableEvent : MonoBehaviour
         GameEvents.currentInstance.OnButtonTriggerOff += Deactivated;
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if(id == this.id)
         {
@@ -30,7 +30,7 @@ public class DisableEnableEvent : MonoBehaviour
         }
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if (id == this.id)
         {

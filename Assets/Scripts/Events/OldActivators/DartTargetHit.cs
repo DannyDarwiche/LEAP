@@ -8,7 +8,7 @@ public class DartTargetHit : MonoBehaviour
     //Activates an event upon collision and plays an animation.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Animator animator; 
 

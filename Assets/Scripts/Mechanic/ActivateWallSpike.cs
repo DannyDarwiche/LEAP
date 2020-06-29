@@ -8,7 +8,7 @@ public class ActivateWallSpike : MonoBehaviour
     //Plays spike animation on object.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Animator animator;
 
@@ -17,7 +17,7 @@ public class ActivateWallSpike : MonoBehaviour
         Activated(id);
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if (id == this.id)
             animator.Play("SpikeAnimation");

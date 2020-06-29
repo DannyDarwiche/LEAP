@@ -8,7 +8,7 @@ public class RotateEventTrigger : MonoBehaviour
     //Rotates object when activated by trigger.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Vector3 rotationVector;
     [SerializeField]
@@ -28,13 +28,13 @@ public class RotateEventTrigger : MonoBehaviour
             transform.Rotate(rotationVector * rotationSpeed * Time.deltaTime);
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if (id == this.id)
             activated = true;
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if (id == this.id)
             activated = false;

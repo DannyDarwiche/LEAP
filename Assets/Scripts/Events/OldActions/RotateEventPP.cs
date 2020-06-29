@@ -8,7 +8,7 @@ public class RotateEventPP : MonoBehaviour
     //Rotates object when activated by preassure plate.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Vector3 rotationVector;
     [SerializeField]
@@ -28,13 +28,13 @@ public class RotateEventPP : MonoBehaviour
             transform.Rotate(rotationVector * rotationSpeed * Time.deltaTime);
     }
 
-    void Activated(int id, float percentage)
+    void Activated(float id, float percentage)
     {
         if (id == this.id)
             activated = true;
     }
 
-    void Deactivated(int id, float percentage)
+    void Deactivated(float id, float percentage)
     {
         if (id == this.id)
             if(percentage == 0)

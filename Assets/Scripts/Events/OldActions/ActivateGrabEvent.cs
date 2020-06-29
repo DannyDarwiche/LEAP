@@ -8,7 +8,7 @@ public class ActivateGrabEvent : MonoBehaviour
     //When activated by a button it enables the object to pick up other objects like a magnet.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     CarryRigidBodiesSensor sensor;
     [SerializeField]
@@ -32,7 +32,7 @@ public class ActivateGrabEvent : MonoBehaviour
                 body.useGravity = true;
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if (id == this.id)
         {
@@ -46,7 +46,7 @@ public class ActivateGrabEvent : MonoBehaviour
         }
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if (id == this.id)
         {

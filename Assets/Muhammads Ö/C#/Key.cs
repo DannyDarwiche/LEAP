@@ -8,13 +8,13 @@ public class Key : MonoBehaviour
     //public GameObject Door;
     //public GameObject ActivatedDoor;
     [SerializeField]
-    public int ID;
+    public float id;
 
     private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject == Hole)
         {
-            GameEvents.currentInstance.ButtonTriggerOn(ID);
+            GameEvents.currentInstance.ButtonTriggerOn(id);
             //ActivatedDoor.SetActive(true);
             //Debug.Log("Collision");
         }
