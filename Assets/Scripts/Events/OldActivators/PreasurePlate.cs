@@ -8,7 +8,7 @@ public class PreasurePlate : MonoBehaviour
     //Activates event based on mass on a preassure plate.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     float expectedMass;
     [SerializeField]
@@ -35,6 +35,6 @@ public class PreasurePlate : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         currentMass -= other.attachedRigidbody.mass;
-        GameEvents.currentInstance.PreasureplatTriggerOff(id, currentMass / expectedMass);
+        GameEvents.currentInstance.PreasureplateTriggerOff(id, currentMass / expectedMass);
     }
 }

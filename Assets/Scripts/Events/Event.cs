@@ -5,12 +5,12 @@ using UnityEngine;
 public class Event : MonoBehaviour
 {
     [SerializeField]
-    int id;
+    float id;
 
     protected float activeState, loopActiveState;
     protected bool activated;
 
-    protected void Activated(int id)
+    protected void Activated(float id)
     {
         if (id == this.id)
         {
@@ -20,7 +20,7 @@ public class Event : MonoBehaviour
         }
     }
 
-    protected void Deactivated(int id)
+    protected void Deactivated(float id)
     {
         if (id == this.id)
         {
@@ -29,7 +29,7 @@ public class Event : MonoBehaviour
         }
     }
 
-    protected void Activated(int id, float percentage)
+    protected void Activated(float id, float percentage)
     {
         if (id == this.id)
         {
@@ -40,7 +40,7 @@ public class Event : MonoBehaviour
         }
     }
 
-    protected void Deactivated(int id, float percentage)
+    protected void Deactivated(float id, float percentage)
     {
         if (id == this.id)
         {
@@ -48,11 +48,8 @@ public class Event : MonoBehaviour
             loopActiveState = percentage;
             if (percentage == 0)
             {
-                activeState = 0;
                 activated = false;
             }
         }
     }
-
-
 }

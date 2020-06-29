@@ -7,7 +7,7 @@ public class CraftingTable2 : MonoBehaviour
     public GameObject White1, White2, Blue1;
     public bool White1isTrue, White2isTrue;
     [SerializeField]
-    public int ID;
+    public float id;
 
     private void OnCollisionEnter(Collision col)
     {

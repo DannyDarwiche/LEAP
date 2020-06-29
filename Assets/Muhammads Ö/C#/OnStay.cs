@@ -8,14 +8,14 @@ public class OnStay : MonoBehaviour
     public GameObject Door;
     public GameObject ActivatedDoor;
     [SerializeField]
-    public int ID;
+    public float id;
     bool isWaiting = false;
 
     private void OnCollisionEnter(Collision col)
     {
         if (col.gameObject == Plate)
         {
-            GameEvents.currentInstance.ButtonTriggerOn(ID);
+            GameEvents.currentInstance.ButtonTriggerOn(id);
             Destroy(Door);
         }
     }

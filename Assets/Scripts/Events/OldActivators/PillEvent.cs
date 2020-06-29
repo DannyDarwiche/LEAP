@@ -8,7 +8,7 @@ public class PillEvent : MonoBehaviour
     //Activates event when object is clicked.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     GameObject player;
     [SerializeField]

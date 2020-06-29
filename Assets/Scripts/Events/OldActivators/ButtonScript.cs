@@ -8,7 +8,7 @@ public class ButtonScript : MonoBehaviour
     //Activates an event when a button is pressed or collided with.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     GameObject player;
     [SerializeField]

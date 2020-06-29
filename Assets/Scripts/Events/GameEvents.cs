@@ -30,72 +30,72 @@ public class GameEvents : MonoBehaviour
             OnUpgradeGet(abilityType);
     }
 
-    public event Action<int> OnButtonTriggerOn;
-    public void ButtonTriggerOn(int id)
+    public event Action<float> OnButtonTriggerOn;
+    public void ButtonTriggerOn(float id)
     {
         if (OnButtonTriggerOn != null)
             OnButtonTriggerOn(id);
     }
 
-    public event Action<int> OnButtonTriggerOff;
-    public void ButtonTriggerOff(int id)
+    public event Action<float> OnButtonTriggerOff;
+    public void ButtonTriggerOff(float id)
     {
         if (OnButtonTriggerOff != null)
             OnButtonTriggerOff(id);
     }
 
-    public event Action<int, float> OnPreasureplateTriggerOn;
-    public void PreasureplateTriggerOn(int id, float percentage)
+    public event Action<float, float> OnPreasureplateTriggerOn;
+    public void PreasureplateTriggerOn(float id, float percentage)
     {
         if (OnPreasureplateTriggerOn != null)
             OnPreasureplateTriggerOn(id, percentage);
     }
 
-    public event Action<int, float> OnPreasureplateTriggerOff;
-    public void PreasureplatTriggerOff(int id, float percentage)
+    public event Action<float, float> OnPreasureplateTriggerOff;
+    public void PreasureplateTriggerOff(float id, float percentage)
     {
         if (OnPreasureplateTriggerOff != null)
             OnPreasureplateTriggerOff(id, percentage);
     }
 
-    public event Action<int> OnPuzzleSolvedTrigger;
-    public void PuzzleSolvedTrigger(int id)
+    public event Action<float> OnPuzzleSolvedTrigger;
+    public void PuzzleSolvedTrigger(float id)
     {
         if (OnPuzzleSolvedTrigger != null)
             OnPuzzleSolvedTrigger(id);
     }
 
-    public event Action<int> OnPuzzleFailedTrigger;
-    public void PuzzleFailedTrigger(int id)
+    public event Action<float> OnPuzzleFailedTrigger;
+    public void PuzzleFailedTrigger(float id)
     {
         if (OnPuzzleFailedTrigger != null)
             OnPuzzleFailedTrigger(id);
     }
 
     //GreenKeyPlatform
-    public event Action<int> OnPlatformTriggerOn; 
-    public void PlatformTriggerOn(int id)
+    public event Action<float> OnPlatformTriggerOn; 
+    public void PlatformTriggerOn(float id)
     {
         if (OnPlatformTriggerOn != null)
             OnPlatformTriggerOn(id); 
     }
 
     //GreenKeyPlatform
-    public event Action<int> OnPlatformTriggerOff; 
-    public void PlatformTriggerOff(int id)
+    public event Action<float> OnPlatformTriggerOff; 
+    public void PlatformTriggerOff(float id)
     {
         if (OnPlatformTriggerOff != null)
             OnPlatformTriggerOff(id); 
     }
 
-    public event Action<int> OnTriggerOn;
-    public void TriggerOn(int id)
+    public event Action<float> OnTriggerOn;
+    public void TriggerOn(float id)
     {
         if (OnTriggerOn != null)
             OnTriggerOn(id);
     }
-    public event Action<int> OnTriggerOff;
-    public void TriggerOff(int id)
+    public event Action<float> OnTriggerOff;
+    public void TriggerOff(float id)
     {
         if (OnTriggerOff != null)
             OnTriggerOff(id);

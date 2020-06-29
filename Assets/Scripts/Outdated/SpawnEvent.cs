@@ -8,7 +8,7 @@ public class SpawnEvent : MonoBehaviour
     //Currently outdated.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     string spawnedObjectTag;
     [SerializeField, Range(0, 1)]
@@ -43,13 +43,13 @@ public class SpawnEvent : MonoBehaviour
         }
     }
 
-    void Activated(int id)
+    void Activated(float id)
     {
         if (id == this.id)
             spawning = true;
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if (id == this.id)
             spawning = false;

@@ -8,7 +8,7 @@ public class MoveEventPP : MonoBehaviour
     //Moves object activated by pressure plate.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Vector3 moveDirection;
     [SerializeField]
@@ -37,7 +37,7 @@ public class MoveEventPP : MonoBehaviour
         transform.SetPositionAndRotation(moveDistance, transform.rotation);
     }
 
-    void Activated(int id, float percentage)
+    void Activated(float id, float percentage)
     {
         if (id == this.id)
         {
@@ -47,7 +47,7 @@ public class MoveEventPP : MonoBehaviour
         }
     }
 
-    void Deactivated(int id, float percentage)
+    void Deactivated(float id, float percentage)
     {
         if (id == this.id)
         {

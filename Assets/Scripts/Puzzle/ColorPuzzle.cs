@@ -9,7 +9,7 @@ public class ColorPuzzle : MonoBehaviour
     //Activates an event if all color matches are correct.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     ColorMatch[] colorMatches;
 

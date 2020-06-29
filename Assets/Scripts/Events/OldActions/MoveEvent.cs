@@ -8,17 +8,17 @@ public class MoveEvent : MonoBehaviour
     //Moves object activated by button.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Vector3 moveDirection;
     [SerializeField]
     float moveLength, moveSpeed;
 
     bool activated;
-    int activeState;
+    float activeState;
     Vector3 startPosition;
 
-    public void Activated(int id)
+    public void Activated(float id)
     {
         if (id == this.id)
         {
@@ -27,7 +27,7 @@ public class MoveEvent : MonoBehaviour
         }
     }
 
-    public void Deactivated(int id)
+    public void Deactivated(float id)
     {
         if (id == this.id)
         {

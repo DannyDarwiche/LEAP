@@ -8,7 +8,7 @@ public class MoveEventMagnet : MonoBehaviour
     //Moves object in a certain direction activated by button.
 
     [SerializeField]
-    int id;
+    float id;
     [SerializeField]
     Vector3 moveDirection;
     [SerializeField]
@@ -28,13 +28,13 @@ public class MoveEventMagnet : MonoBehaviour
             transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
     }
     
-    void Activated(int id)
+    void Activated(float id)
     {
         if (id == this.id)
             active = true;
     }
 
-    void Deactivated(int id)
+    void Deactivated(float id)
     {
         if (id == this.id)
             active = false;

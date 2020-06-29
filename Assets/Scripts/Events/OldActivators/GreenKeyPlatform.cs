@@ -8,7 +8,7 @@ public class GreenKeyPlatform : MonoBehaviour
     //Triggers event when the correct object enters the trigger collider.
 
     [SerializeField]
-    int id;
+    float id;
 
     bool gotTriggerd = false;
 
