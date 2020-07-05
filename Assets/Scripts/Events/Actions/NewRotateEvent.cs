@@ -11,6 +11,13 @@ public class NewRotateEvent : Event
     Vector3 rotationVector;
     [SerializeField]
     float rotationSpeed;
+    [Header("PartialRotation")]
+    [SerializeField]
+    bool partialRotation;
+    [SerializeField]
+    Vector3 maxRotation;
+
+    float time;
 
     void Start()
     {
@@ -24,8 +31,19 @@ public class NewRotateEvent : Event
 
     void Update()
     {
-        if(activated)
-            transform.Rotate(rotationVector * rotationSpeed * Time.deltaTime);
+        if (activated)
+        {
+            if (partialRotation)
+            {
+                time += Time.deltaTime;
+
+                transform.localRotation = Quaternion.Euler(maxRotation.x * Mathf.Sin(time * rotationSpeed), 
+                    maxRotation.y * Mathf.Sin(time * rotationSpeed), 
+                    maxRotation.z * Mathf.Sin(time * rotationSpeed));
+            }
+            else
+                transform.Rotate(rotationVector * rotationSpeed * Time.deltaTime);
+        }
     }
 
     void OnDestroy()
