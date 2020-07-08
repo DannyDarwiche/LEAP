@@ -16,6 +16,8 @@ public class BreakPoint : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log(collision.impulse.magnitude);
+
         Vector3 impactForce = collision.impulse;
         if (impactForce.magnitude > breakForce)
             destructible.Break();
