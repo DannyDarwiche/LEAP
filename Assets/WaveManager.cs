@@ -10,7 +10,7 @@ public class WaveManager : MonoBehaviour
 
     void Start()
     {
-        if(instance == null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -26,8 +26,11 @@ public class WaveManager : MonoBehaviour
         offset += Time.deltaTime * speed;
     }
 
-    public float GetWaveHeight(float x)
+    public float GetWaveHeight(float x, bool input = false)
     {
-        return amplitude * Mathf.Sin(x / length + offset);
+        if (input)
+            return amplitude * Mathf.Sin(x / length + offset);
+        else
+            return transform.position.y + 12 + amplitude * Mathf.Sin(x / length + offset);
     }
 }

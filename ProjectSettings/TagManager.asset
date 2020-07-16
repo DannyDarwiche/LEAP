@@ -13,6 +13,10 @@ TagManager:
   - KeyBlue
   - KeyRed
   - UpgradeButton
+  - Head
+  - Torso
+  - Arm
+  - Legs
   layers:
   - Default
   - TransparentFX
